@@ -67,7 +67,7 @@ publishing {
             artifactId = "multiblock-lib"
             from(components["java"])
 
-            version = if (System.getenv("SNAPSHOTS_URL") != null) {
+            version = if (System.getenv("SNAPSHOTS_USERNAME") != null) {
                 "$modVersion-SNAPSHOT"
             } else {
                 modVersion
