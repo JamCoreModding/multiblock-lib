@@ -1,37 +1,34 @@
 {
   "schemaVersion": 1,
-  "id": "%id%",
+  "id": "multiblocklib",
   "version": "${version}",
-  "name": "%name%",
-  "description": "%description%",
+  "name": "Multiblock Lib",
+  "description": "A library for multiblocks!",
   "authors": [
-    "Jamalam360 - Owner, Developer"
+    "Jamalam360 - Developer"
   ],
-  "contributors": [],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/",
-    "issues": "https://github.com/%githubOrg%/%github%/issues",
-    "sources": "https://github.com/%githubOrg%/%github%"
+    "homepage": "https://github.com/JamCoreModding/MultiblockLib",
+    "issues": "https://github.com/JamCoreModding/MultiblockLib/issues",
+    "sources": "https://github.com/JamCoreModding/MultiblockLib"
   },
   "license": "MIT",
-  "icon": "assets/%id%/icon.png",
+  "icon": "assets/multiblocklib/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "io.github.jamalam360.%name%ModInit"
-    ],
+    "main": [],
     "client": [],
     "server": []
   },
   "mixins": [
-    "%id%.mixins.json"
+    "multiblocklib.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.12.5",
     "fabric": "*"
   },
   "custom": {
-    "notify_gradle_properties_url": "https://raw.githubusercontent.com/%githubOrg%/%github%/main/gradle.properties",
+    "notify_gradle_properties_url": "https://raw.githubusercontent.com/JamCoreModding/MultiblockLib/main/gradle.properties",
     "notify_gradle_properties_key": "modVersion"
   }
 }
