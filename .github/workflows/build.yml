@@ -93,6 +93,9 @@ jobs:
         if: ${{  env.run != 'false'  }}
         run: ./gradlew build
 
+      - name: Publish Snapshot
+        run: ./gradlew publish
+
       - name: Capture Build Artifacts
         if: ${{ env.run != 'false' }}
         uses: actions/upload-artifact@v2
