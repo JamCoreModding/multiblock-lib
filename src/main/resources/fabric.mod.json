@@ -16,7 +16,9 @@
   "icon": "assets/multiblocklib/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [],
+    "main": [
+      "io.github.jamalam360.test.TestInit"
+    ],
     "client": [],
     "server": []
   },

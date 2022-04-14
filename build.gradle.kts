@@ -1,4 +1,7 @@
+import java.util.*
+
 plugins {
+    id("maven-publish")
     id("fabric-loom") version "0.11-SNAPSHOT"
     id("io.github.juuxel.loom-quiltflower") version "1.6.0"
     id("org.quiltmc.quilt-mappings-on-loom") version "4.0.0"
@@ -57,4 +60,44 @@ tasks {
     }
 }
 
+publishing {
+    val localProperties = Properties()
+    localProperties.load(project.rootProject.file("local.properties").inputStream())
 
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "io.github.jamalam360"
+            artifactId = "multiblock-lib"
+            from(components["java"])
+
+            version = if (System.getenv("SNAPSHOTS_URL") != null) {
+                "$modVersion-SNAPSHOT"
+            } else {
+                modVersion
+            }
+        }
+    }
+
+    repositories {
+        if (System.getenv("SNAPSHOTS_URL") != null) {
+            maven {
+                name = "JamalamMavenSnapshot"
+                url = uri(System.getenv("SNAPSHOTS_URL"))
+
+                credentials {
+                    username = System.getenv("SNAPSHOTS_USERNAME")
+                    password = System.getenv("SNAPSHOTS_PASSWORD")
+                }
+            }
+        }
+
+        maven {
+            name = "JamalamMavenRelease"
+            url = uri("https://maven.jamalam.tech/releases")
+            credentials {
+                username = localProperties["MAVEN_USERNAME"] as String
+                password = localProperties["MAVEN_PASSWORD"] as String
+            }
+        }
+    }
+}
