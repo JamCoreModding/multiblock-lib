@@ -89,14 +89,14 @@ publishing {
                     password = System.getenv("SNAPSHOTS_PASSWORD")
                 }
             }
-        }
-
-        maven {
-            name = "JamalamMavenRelease"
-            url = uri("https://maven.jamalam.tech/releases")
-            credentials {
-                username = localProperties["MAVEN_USERNAME"] as String
-                password = localProperties["MAVEN_PASSWORD"] as String
+        } else {
+            maven {
+                name = "JamalamMavenRelease"
+                url = uri("https://maven.jamalam.tech/releases")
+                credentials {
+                    username = localProperties["MAVEN_USERNAME"] as String
+                    password = localProperties["MAVEN_PASSWORD"] as String
+                }
             }
         }
     }
