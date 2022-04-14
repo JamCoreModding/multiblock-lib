@@ -65,28 +65,13 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "io.github.jamalam360"
             artifactId = "multiblock-lib"
+            version = modVersion
             from(components["java"])
-
-            version = if (System.getenv("SNAPSHOTS_USERNAME") != null) {
-                "$modVersion-SNAPSHOT"
-            } else {
-                modVersion
-            }
         }
     }
 
     repositories {
-        if (System.getenv("SNAPSHOTS_USERNAME") != null) {
-            maven {
-                name = "JamalamMavenSnapshot"
-                url = uri("https://maven.jamalam.tech/snapshots")
-
-                credentials {
-                    username = System.getenv("SNAPSHOTS_USERNAME") as String
-                    password = System.getenv("SNAPSHOTS_PASSWORD") as String
-                }
-            }
-        } else {
+        if (project.rootProject.file("local.properties").exists()) {
             val localProperties = Properties()
             localProperties.load(project.rootProject.file("local.properties").inputStream())
 

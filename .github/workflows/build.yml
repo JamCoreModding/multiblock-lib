@@ -1,10 +1,6 @@
 name: Build
 on: push
 
-env:
-  SNAPSHOTS_USERNAME: ${{ secrets.SNAPSHOTS_USERNAME }}
-  SNAPSHOTS_PASSWORD: ${{ secrets.SNAPSHOTS_PASSWORD }}
-
 jobs:
   update-license:
     strategy:
@@ -52,7 +48,7 @@ jobs:
           branch: ${{ github.ref }}
 
   build:
-    #needs: update-license
+    needs: update-license
     strategy:
       matrix:
         java: [
@@ -96,9 +92,6 @@ jobs:
       - name: Build
         if: ${{  env.run != 'false'  }}
         run: ./gradlew build
-
-      - name: Publish Snapshot
-        run: ./gradlew publish
 
       - name: Capture Build Artifacts
         if: ${{ env.run != 'false' }}
