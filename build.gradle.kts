@@ -82,8 +82,8 @@ publishing {
                 url = uri("https://maven.jamalam.tech/snapshots")
 
                 credentials {
-                    username = System.getenv("SNAPSHOTS_USERNAME")
-                    password = System.getenv("SNAPSHOTS_PASSWORD")
+                    username = System.getenv("SNAPSHOTS_USERNAME") as String
+                    password = System.getenv("SNAPSHOTS_PASSWORD") as String
                 }
             }
         } else {
