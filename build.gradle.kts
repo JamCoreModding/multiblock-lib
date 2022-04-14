@@ -76,10 +76,10 @@ publishing {
     }
 
     repositories {
-        if (System.getenv("SNAPSHOTS_URL") != null) {
+        if (System.getenv("SNAPSHOTS_USERNAME") != null) {
             maven {
                 name = "JamalamMavenSnapshot"
-                url = uri(System.getenv("SNAPSHOTS_URL"))
+                url = uri("https://maven.jamalam.tech/snapshots")
 
                 credentials {
                     username = System.getenv("SNAPSHOTS_USERNAME")
