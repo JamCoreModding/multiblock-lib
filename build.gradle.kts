@@ -89,7 +89,7 @@ publishing {
         } else {
             val localProperties = Properties()
             localProperties.load(project.rootProject.file("local.properties").inputStream())
-            
+
             maven {
                 name = "JamalamMavenRelease"
                 url = uri("https://maven.jamalam.tech/releases")

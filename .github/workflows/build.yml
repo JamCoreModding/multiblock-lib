@@ -1,6 +1,11 @@
 name: Build
 on: push
 
+env:
+  SNAPSHOTS_USERNAME: ${{ secrets.SNAPSHOTS_USERNAME }}
+  SNAPSHOTS_PASSWORD: ${{ secrets.SNAPSHOTS_PASSWORD }}
+  SNAPSHOTS_URL: ${{ secrets.SNAPSHOTS_URL }}
+
 jobs:
   update-license:
     strategy:
