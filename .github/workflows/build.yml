@@ -67,14 +67,6 @@ jobs:
         id: branch-name
         uses: tj-actions/branch-names@v5
 
-      - name: Check If Running In Template Repository
-        if: ${{ github.event.repository.name == 'FabricTemplateMod' }}
-        run: echo "run=false" >> $GITHUB_ENV
-
-      - name: Check If Initial Commit
-        if: ${{ github.event.commits[0].message == 'Initial commit' }}
-        run: echo "run=false" >> $GITHUB_ENV
-
       - name: Check For --no-actions Flag
         if: ${{ contains(github.event.commits[0].message, '--no-actions') }}
         run: echo "run=false" >> $GITHUB_ENV
@@ -107,3 +99,10 @@ jobs:
         with:
           name: Artifacts
           path: build/libs/
+
+      - name: Capture Development Build Artifacts
+        if: ${{ env.run != 'false' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: Development Artifacts
+          path: build/devlibs/
