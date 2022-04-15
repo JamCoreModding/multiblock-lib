@@ -49,7 +49,6 @@ public class MultiblockLib {
     //TODO: Proper logging of necessary information
     //TODO: Disassemble multiblocks when a block inside them is broken
     //TODO: Flesh out the multiblock API with more methods (click, neighbor state change, etc.)
-    //TODO: Implement hit-boxes for multiblocks
     //TODO: Place from any block on the multiblock
     //TODO: MultiblockContext record
     //TODO: Multiblock NBT methods (can probably use CCA)
