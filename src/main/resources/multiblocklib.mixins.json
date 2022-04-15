@@ -2,7 +2,9 @@
   "required": true,
   "package": "io.github.jamalam360.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": [],
+  "mixins": [
+    "WorldRendererMixin"
+  ],
   "client": [],
   "server": [],
   "injectors": {

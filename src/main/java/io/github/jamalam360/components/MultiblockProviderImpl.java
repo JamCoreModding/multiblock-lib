@@ -25,9 +25,11 @@
 package io.github.jamalam360.components;
 
 import com.google.common.collect.Maps;
+import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import io.github.jamalam360.Multiblock;
 import io.github.jamalam360.MultiblockLib;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -40,7 +42,7 @@ import java.util.*;
 /**
  * @author Jamalam360
  */
-public class MultiblockProviderImpl implements MultiblockProvider, ServerTickingComponent {
+public class MultiblockProviderImpl implements MultiblockProvider, ServerTickingComponent, AutoSyncedComponent {
     private final World provider;
     private final Map<BlockPos[], Multiblock> MULTIBLOCKS = Maps.newHashMap();
 
@@ -124,6 +126,7 @@ public class MultiblockProviderImpl implements MultiblockProvider, ServerTicking
             int[] bottomLeftArr = multiblockTag.getIntArray("BottomLeft");
             BlockPos bottomLeft = new BlockPos(bottomLeftArr[0], bottomLeftArr[1], bottomLeftArr[2]);
             Identifier identifier = new Identifier(multiblockTag.getString("PatternIdentifier"));
+
             MultiblockLib.tryAssembleMultiblock(identifier, provider, bottomLeft);
         }
     }

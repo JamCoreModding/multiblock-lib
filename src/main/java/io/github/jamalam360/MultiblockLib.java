@@ -80,11 +80,9 @@ public class MultiblockLib {
     }
 
     public static boolean tryAssembleMultiblock(List<MultiblockPattern> possiblePatterns, World world, BlockPos pos) {
-        if (!world.isClient) {
-            for (MultiblockPattern pattern : possiblePatterns) {
-                if (tryAssembleMultiblock(pattern, world, pos)) {
-                    return true;
-                }
+        for (MultiblockPattern pattern : possiblePatterns) {
+            if (tryAssembleMultiblock(pattern, world, pos)) {
+                return true;
             }
         }
 
@@ -92,29 +90,25 @@ public class MultiblockLib {
     }
 
     public static boolean tryAssembleMultiblock(Identifier patternId, World world, BlockPos pos) {
-        if (!world.isClient) {
-            Optional<MultiblockPattern> optional = MultiblockPatterns.get(patternId);
-            if (optional.isPresent()) {
-                return tryAssembleMultiblock(optional.get(), world, pos);
-            }
+        Optional<MultiblockPattern> optional = MultiblockPatterns.get(patternId);
+        if (optional.isPresent()) {
+            return tryAssembleMultiblock(optional.get(), world, pos);
         }
 
         return false;
     }
 
     public static boolean tryAssembleMultiblock(MultiblockPattern pattern, World world, BlockPos pos) {
-        if (!world.isClient) {
-            MatchResult result = PatternTester.tryMatchPattern(pos, world, pattern, MULTIBLOCK_PATTERNS_TO_KEYS.get(pattern.identifier()));
-            if (result.matched()) {
-                System.out.println("Found multiblock at " + pos + " with height " + result.height() + ", width " + result.width() + ", and depth " + result.depth());
+        MatchResult result = PatternTester.tryMatchPattern(pos, world, pattern, MULTIBLOCK_PATTERNS_TO_KEYS.get(pattern.identifier()));
+        if (result.matched()) {
+            System.out.println("Found multiblock at " + pos + " with height " + result.height() + ", width " + result.width() + ", and depth " + result.depth());
 
-                MultiblockProvider provider = MULTIBLOCK_PATTERNS_TO_PROVIDERS.get(pattern.identifier());
+            MultiblockProvider provider = MULTIBLOCK_PATTERNS_TO_PROVIDERS.get(pattern.identifier());
 
-                if (provider != null) {
-                    Multiblock multiblock = provider.getMultiblock(pos, world, result);
-                    CardinalComponentsInit.PROVIDER.get(world).addMultiblock(multiblock);
-                    return true;
-                }
+            if (provider != null) {
+                Multiblock multiblock = provider.getMultiblock(pos, world, result);
+                CardinalComponentsInit.PROVIDER.get(world).addMultiblock(multiblock);
+                return true;
             }
         }
 

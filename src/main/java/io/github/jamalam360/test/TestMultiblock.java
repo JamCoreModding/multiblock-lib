@@ -40,6 +40,6 @@ public class TestMultiblock extends Multiblock {
 
     @Override
     public void tick(MultiblockContext context) {
-        System.out.println("tick. bottom text.");
+
     }
 }

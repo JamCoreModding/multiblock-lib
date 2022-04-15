@@ -30,6 +30,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 
 /**
@@ -40,12 +42,14 @@ public abstract class Multiblock {
     private final World world;
     private final MatchResult matchResult;
     private final BlockBox box;
+    private final VoxelShape shape;
 
     public Multiblock(BlockPos pos, World world, MatchResult match) {
         this.bottomLeftPos = pos;
         this.world = world;
         this.matchResult = match;
         this.box = match.box();
+        this.shape = VoxelShapes.cuboid(Box.from(this.box));
     }
 
     public BlockPos getBottomLeftPos() {
@@ -71,9 +75,9 @@ public abstract class Multiblock {
         return ActionResult.PASS;
     }
 
-    public Box getCollisionBox(MultiblockContext context) {
-//        return context.box();
-        return null;
+    public VoxelShape getOutlineShape(MultiblockContext context) {
+        System.out.println(shape);
+        return shape;
     }
 
     /**
