@@ -25,6 +25,7 @@
 package io.github.jamalam360;
 
 import io.github.jamalam360.pattern.MatchResult;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockBox;
@@ -49,7 +50,7 @@ public abstract class Multiblock {
         this.world = world;
         this.matchResult = match;
         this.box = match.box();
-        this.shape = VoxelShapes.cuboid(Box.from(this.box));
+        this.shape = Block.createCuboidShape(0, 0, 0, match.width() * 16, match.height() * 16, match.depth() * 16);
     }
 
     public BlockPos getBottomLeftPos() {
@@ -76,7 +77,6 @@ public abstract class Multiblock {
     }
 
     public VoxelShape getOutlineShape(MultiblockContext context) {
-        System.out.println(shape);
         return shape;
     }
 
