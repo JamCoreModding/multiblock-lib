@@ -17,10 +17,12 @@
   "environment": "*",
   "entrypoints": {
     "main": [
+      "io.github.jamalam360.MultiblockEntrypoint",
       "io.github.jamalam360.test.TestInit"
     ],
-    "client": [],
-    "server": []
+    "cardinal-components-world": [
+      "io.github.jamalam360.components.CardinalComponentsInit"
+    ]
   },
   "mixins": [
     "multiblocklib.mixins.json"
@@ -31,6 +33,9 @@
   },
   "custom": {
     "notify_gradle_properties_url": "https://raw.githubusercontent.com/JamCoreModding/MultiblockLib/main/gradle.properties",
-    "notify_gradle_properties_key": "modVersion"
+    "notify_gradle_properties_key": "modVersion",
+    "cardinal-components": [
+      "multiblocklib:multiblock_provider"
+    ]
   }
 }

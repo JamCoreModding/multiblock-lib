@@ -14,7 +14,9 @@ group = "io.github.jamalam360"
 version = modVersion
 
 repositories {
-    val mavenUrls = listOf<String>()
+    val mavenUrls = listOf(
+        "https://ladysnake.jfrog.io/artifactory/mods"
+    )
 
     for (url in mavenUrls) {
         maven(url = url)
@@ -29,6 +31,8 @@ dependencies {
 
     modImplementation(libs.loader)
     modImplementation(libs.fabric.api)
+    modImplementation(libs.cca.base)
+    modImplementation(libs.cca.world)
 }
 
 tasks {

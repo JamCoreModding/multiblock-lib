@@ -25,11 +25,10 @@
 package io.github.jamalam360.test;
 
 import io.github.jamalam360.MultiblockLib;
+import io.github.jamalam360.pattern.MultiblockPatternKeyBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.pattern.BlockPatternBuilder;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -38,33 +37,39 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.util.Map;
+import java.util.function.Predicate;
+
 /**
  * @author Jamalam360
  */
 public class TestInit implements ModInitializer {
+    private static final Map<Character, Predicate<CachedBlockPosition>> DEFAULT_KEYS = MultiblockPatternKeyBuilder.start()
+            .where('G', CachedBlockPosition.matchesBlockState(state -> state.getBlock() == Blocks.GLASS))
+            .where('I', CachedBlockPosition.matchesBlockState(state -> state.getBlock() == Blocks.IRON_BLOCK))
+            .build();
+
     @Override
     public void onInitialize() {
-        MultiblockLib.registerMultiblock(TestMultiblock::new, BlockPatternBuilder.start()
-                .aisle("III", "ICI", "III")
-                .aisle("ICI", "CCC", "ICI")
-                .aisle("III", "ICI", "III")
-                .where('I', CachedBlockPosition.matchesBlockState(state -> state.getBlock() == Blocks.GLASS))
-                .where('C', CachedBlockPosition.matchesBlockState(state -> state.getBlock() == Blocks.COPPER_BLOCK))
-                .build()
-        );
+        MultiblockLib.registerMultiblock(new Identifier("multiblocklib", "rotatable"), TestMultiblock::new, DEFAULT_KEYS);
+        MultiblockLib.registerMultiblock(new Identifier("multiblocklib", "other"), TestMultiblock::new, DEFAULT_KEYS);
+        MultiblockLib.registerMultiblock(new Identifier("multiblocklib", "test"), TestMultiblock::new, DEFAULT_KEYS);
 
         Registry.register(Registry.ITEM, new Identifier("multiblocklib", "test_assembler"), new TestAssemblerItem());
     }
 
-     static class TestAssemblerItem extends Item {
+    static class TestAssemblerItem extends Item {
         public TestAssemblerItem() {
             super(new FabricItemSettings().group(ItemGroup.TOOLS));
         }
 
         @Override
         public ActionResult useOnBlock(ItemUsageContext context) {
-            Block block = context.getWorld().getBlockState(context.getBlockPos()).getBlock();
-            if (block == Blocks.IRON_BLOCK || block == Blocks.COPPER_BLOCK) {
+            if (MultiblockLib.isPartOfMultiblock(context.getWorld(), context.getBlockPos())) {
+                if (MultiblockLib.tryDisassembleMultiblock(MultiblockLib.getMultiblock(context.getWorld(), context.getBlockPos()).get(), false)) {
+                    return ActionResult.SUCCESS;
+                }
+            } else {
                 if (MultiblockLib.tryAssembleMultiblock(context.getWorld(), context.getBlockPos())) {
                     return ActionResult.SUCCESS;
                 }

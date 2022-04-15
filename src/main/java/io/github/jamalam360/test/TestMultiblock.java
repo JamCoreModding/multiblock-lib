@@ -25,9 +25,21 @@
 package io.github.jamalam360.test;
 
 import io.github.jamalam360.Multiblock;
+import io.github.jamalam360.MultiblockContext;
+import io.github.jamalam360.pattern.MatchResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
  * @author Jamalam360
  */
 public class TestMultiblock extends Multiblock {
+    public TestMultiblock(BlockPos pos, World world, MatchResult match) {
+        super(pos, world, match);
+    }
+
+    @Override
+    public void tick(MultiblockContext context) {
+        System.out.println("tick. bottom text.");
+    }
 }

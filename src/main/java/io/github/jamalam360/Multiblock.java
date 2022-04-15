@@ -24,8 +24,64 @@
 
 package io.github.jamalam360;
 
+import io.github.jamalam360.pattern.MatchResult;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.BlockBox;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.world.World;
+
 /**
  * @author Jamalam360
  */
 public abstract class Multiblock {
+    private final BlockPos bottomLeftPos;
+    private final World world;
+    private final MatchResult matchResult;
+    private final BlockBox box;
+
+    public Multiblock(BlockPos pos, World world, MatchResult match) {
+        this.bottomLeftPos = pos;
+        this.world = world;
+        this.matchResult = match;
+        this.box = match.box();
+    }
+
+    public BlockPos getBottomLeftPos() {
+        return bottomLeftPos;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public MatchResult getMatchResult() {
+        return matchResult;
+    }
+
+    public BlockBox getBox() {
+        return box;
+    }
+
+    public void tick(MultiblockContext context) {
+    }
+
+    public ActionResult onUse(PlayerEntity user, BlockPos clickPos, MultiblockContext context) {
+        return ActionResult.PASS;
+    }
+
+    public Box getCollisionBox(MultiblockContext context) {
+//        return context.box();
+        return null;
+    }
+
+    /**
+     * @param context The context.
+     * @param forced  Whether this multiblock is being disassembled forcefully (i.e. one of its blocks was broken)
+     * @return Whether the multiblock can be disassembled. It is recommended to return true if forced is true.
+     */
+    public boolean onDisassemble(MultiblockContext context, boolean forced) {
+        return true;
+    }
 }

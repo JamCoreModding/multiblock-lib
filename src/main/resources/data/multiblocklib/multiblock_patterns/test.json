@@ -1,0 +1,27 @@
+{
+  "layers": [
+    {
+      "rows": [
+        "GIG",
+        "III",
+        "GIG"
+      ]
+    },
+    {
+      "min": 2,
+      "max": 5,
+      "rows": [
+        "GGG",
+        "GIG",
+        "GGG"
+      ]
+    },
+    {
+      "rows": [
+        "GIG",
+        "III",
+        "GIG"
+      ]
+    }
+  ]
+}
