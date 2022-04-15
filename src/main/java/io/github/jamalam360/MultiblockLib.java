@@ -56,6 +56,7 @@ public class MultiblockLib {
     //TODO: Count the number of each block in the multiblock (util method)
     //TODO: Move implementation and API into separate packages
     //TODO: Icon
+    //TODO: Use gametest API
 
     protected static final Map<Identifier, Map<Character, Predicate<CachedBlockPosition>>> MULTIBLOCK_PATTERNS_TO_KEYS = Maps.newHashMap();
     protected static final Map<Identifier, MultiblockProvider> MULTIBLOCK_PATTERNS_TO_PROVIDERS = Maps.newHashMap();
