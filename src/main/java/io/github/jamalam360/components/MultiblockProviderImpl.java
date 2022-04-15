@@ -64,6 +64,7 @@ public class MultiblockProviderImpl implements MultiblockProvider, ServerTicking
         BlockPos.stream(multiblock.getBox()).forEach(pos -> positions.add(pos.toImmutable()));
 
         MULTIBLOCKS.put(positions.toArray(new BlockPos[0]), multiblock);
+        System.out.println(MULTIBLOCKS);
     }
 
     @ApiStatus.Internal

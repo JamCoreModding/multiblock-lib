@@ -40,6 +40,5 @@ public class TestMultiblock extends Multiblock {
 
     @Override
     public void tick(MultiblockContext context) {
-
     }
 }
