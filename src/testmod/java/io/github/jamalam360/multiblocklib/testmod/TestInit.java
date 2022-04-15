@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.test;
-
-import io.github.jamalam360.MultiblockLib;
+package io.github.jamalam360.multiblocklib.testmod;
+import io.github.jamalam360.Multiblock;
+import io.github.jamalam360.multiblocklib.api.MultiblockLib;
 import io.github.jamalam360.pattern.MultiblockPatternKeyBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -33,11 +33,13 @@ import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -51,9 +53,9 @@ public class TestInit implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        MultiblockLib.registerMultiblock(new Identifier("multiblocklib", "rotatable"), TestMultiblock::new, DEFAULT_KEYS);
-        MultiblockLib.registerMultiblock(new Identifier("multiblocklib", "other"), TestMultiblock::new, DEFAULT_KEYS);
-        MultiblockLib.registerMultiblock(new Identifier("multiblocklib", "test"), TestMultiblock::new, DEFAULT_KEYS);
+        MultiblockLib.INSTANCE.registerMultiblock(new Identifier("multiblocklibtest", "rotatable"), TestMultiblock::new, DEFAULT_KEYS);
+        MultiblockLib.INSTANCE.registerMultiblock(new Identifier("multiblocklibtest", "other"), TestMultiblock::new, DEFAULT_KEYS);
+        MultiblockLib.INSTANCE.registerMultiblock(new Identifier("multiblocklibtest", "test"), TestMultiblock::new, DEFAULT_KEYS);
 
         Registry.register(Registry.ITEM, new Identifier("multiblocklib", "test_assembler"), new TestAssemblerItem());
     }
@@ -65,12 +67,21 @@ public class TestInit implements ModInitializer {
 
         @Override
         public ActionResult useOnBlock(ItemUsageContext context) {
-            if (MultiblockLib.isPartOfMultiblock(context.getWorld(), context.getBlockPos())) {
-                if (MultiblockLib.tryDisassembleMultiblock(MultiblockLib.getMultiblock(context.getWorld(), context.getBlockPos()).get(), false)) {
+            Optional<Multiblock> multiblock = MultiblockLib.INSTANCE.getMultiblock(context.getWorld(), context.getBlockPos());
+            if (multiblock.isPresent()) {
+                if (MultiblockLib.INSTANCE.tryDisassembleMultiblock(multiblock.get(), false)) {
+                    if (context.getWorld().isClient) {
+                        context.getPlayer().playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 2.0F, 1.0F);
+                    }
+
                     return ActionResult.SUCCESS;
                 }
             } else {
-                if (MultiblockLib.tryAssembleMultiblock(context.getWorld(), context.getBlockPos())) {
+                if (MultiblockLib.INSTANCE.tryAssembleMultiblock(context.getWorld(), context.getBlockPos())) {
+                    if (context.getWorld().isClient) {
+                        context.getPlayer().playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 2.0F, 1.0F);
+                    }
+
                     return ActionResult.SUCCESS;
                 }
             }

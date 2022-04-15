@@ -28,8 +28,7 @@ import com.google.common.collect.Maps;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import io.github.jamalam360.Multiblock;
-import io.github.jamalam360.MultiblockLib;
-import net.fabricmc.loader.api.FabricLoader;
+import io.github.jamalam360.multiblocklib.api.MultiblockLib;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -110,6 +109,7 @@ public class MultiblockProviderImpl implements MultiblockProvider, ServerTicking
             NbtCompound multiblockTag = new NbtCompound();
             multiblockTag.putIntArray("BottomLeft", new int[]{entry.getValue().getBottomLeftPos().getX(), entry.getValue().getBottomLeftPos().getY(), entry.getValue().getBottomLeftPos().getZ()});
             multiblockTag.putString("PatternIdentifier", entry.getValue().getMatchResult().pattern().identifier().toString());
+            multiblockTag.put("MultiblockTag", entry.getValue().writeTag());
             compound.put("Multiblock" + multiblockNumber, multiblockTag);
         }
         compound.putInt("MultiblockLength", multiblockNumber);
@@ -128,7 +128,9 @@ public class MultiblockProviderImpl implements MultiblockProvider, ServerTicking
             BlockPos bottomLeft = new BlockPos(bottomLeftArr[0], bottomLeftArr[1], bottomLeftArr[2]);
             Identifier identifier = new Identifier(multiblockTag.getString("PatternIdentifier"));
 
-            MultiblockLib.tryAssembleMultiblock(identifier, provider, bottomLeft);
+            if (MultiblockLib.INSTANCE.tryAssembleMultiblock(identifier, provider, bottomLeft)) {
+                this.getMultiblock(bottomLeft).ifPresent(multiblock -> multiblock.readTag(multiblockTag.getCompound("MultiblockTag")));
+            }
         }
     }
 }

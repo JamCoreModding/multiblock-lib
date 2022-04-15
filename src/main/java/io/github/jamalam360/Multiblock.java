@@ -27,12 +27,11 @@ package io.github.jamalam360;
 import io.github.jamalam360.pattern.MatchResult;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 
 /**
@@ -78,6 +77,13 @@ public abstract class Multiblock {
 
     public VoxelShape getOutlineShape(MultiblockContext context) {
         return shape;
+    }
+
+    public NbtCompound writeTag() {
+        return new NbtCompound();
+    }
+
+    public void readTag(NbtCompound tag) {
     }
 
     /**

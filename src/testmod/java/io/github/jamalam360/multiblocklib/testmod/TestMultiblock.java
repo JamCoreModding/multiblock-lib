@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.test;
+package io.github.jamalam360.multiblocklib.testmod;
 
 import io.github.jamalam360.Multiblock;
 import io.github.jamalam360.MultiblockContext;

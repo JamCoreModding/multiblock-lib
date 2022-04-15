@@ -25,7 +25,7 @@
 package io.github.jamalam360.mixin;
 
 import io.github.jamalam360.Multiblock;
-import io.github.jamalam360.MultiblockLib;
+import io.github.jamalam360.multiblocklib.api.MultiblockLib;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,8 +44,8 @@ public class BlockMixin {
             method = "onBreak",
             at = @At("HEAD")
     )
-    public void multiblocklib$checkForMultiblockOnBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo ci){
-        Optional<Multiblock> multiblock = MultiblockLib.getMultiblock(world, pos);
-        multiblock.ifPresent(value -> MultiblockLib.tryDisassembleMultiblock(value, true));
+    public void multiblocklib$checkForMultiblockOnBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo ci) {
+        Optional<Multiblock> multiblock = MultiblockLib.INSTANCE.getMultiblock(world, pos);
+        multiblock.ifPresent(value -> MultiblockLib.INSTANCE.tryDisassembleMultiblock(value, true));
     }
 }

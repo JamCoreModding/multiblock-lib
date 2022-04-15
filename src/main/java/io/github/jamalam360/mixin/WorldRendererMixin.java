@@ -25,7 +25,7 @@
 package io.github.jamalam360.mixin;
 
 import io.github.jamalam360.Multiblock;
-import io.github.jamalam360.MultiblockLib;
+import io.github.jamalam360.multiblocklib.api.MultiblockLib;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.WorldRenderer;
@@ -62,7 +62,7 @@ public abstract class WorldRendererMixin {
             cancellable = true
     )
     public void multiblocklib$modifyOutlineForMultiblocks(MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState, CallbackInfo ci) {
-        Optional<Multiblock> multiblock = MultiblockLib.getMultiblock(world, blockPos);
+        Optional<Multiblock> multiblock = MultiblockLib.INSTANCE.getMultiblock(world, blockPos);
         if (multiblock.isPresent()) {
             drawShapeOutline(
                     matrices,

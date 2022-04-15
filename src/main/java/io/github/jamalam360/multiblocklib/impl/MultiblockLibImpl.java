@@ -1,0 +1,88 @@
+package io.github.jamalam360.multiblocklib.impl;
+
+import com.google.common.collect.Maps;
+import io.github.jamalam360.Multiblock;
+import io.github.jamalam360.components.CardinalComponentsInit;
+import io.github.jamalam360.multiblocklib.api.MultiblockLib;
+import io.github.jamalam360.multiblocklib.api.MultiblockProvider;
+import io.github.jamalam360.pattern.MatchResult;
+import io.github.jamalam360.pattern.MultiblockPattern;
+import io.github.jamalam360.pattern.MultiblockPatterns;
+import io.github.jamalam360.pattern.PatternTester;
+import net.minecraft.block.pattern.CachedBlockPosition;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Predicate;
+
+/**
+ * Implementation of {@link MultiblockLib}. Should not be used directly by library users - access through {@link MultiblockLib#INSTANCE}.
+ *
+ * @author Jamalam360
+ */
+public class MultiblockLibImpl implements MultiblockLib {
+    private static final Map<Identifier, Map<Character, Predicate<CachedBlockPosition>>> MULTIBLOCK_PATTERNS_TO_KEYS = Maps.newHashMap();
+    private static final Map<Identifier, MultiblockProvider> MULTIBLOCK_PATTERNS_TO_PROVIDERS = Maps.newHashMap();
+
+    @Override
+    public void registerMultiblock(Identifier identifier, MultiblockProvider provider, Map<Character, Predicate<CachedBlockPosition>> keys) {
+        MULTIBLOCK_PATTERNS_TO_PROVIDERS.put(identifier, provider);
+        MULTIBLOCK_PATTERNS_TO_KEYS.put(identifier, keys);
+    }
+
+    @Override
+    public boolean tryAssembleMultiblock(World world, BlockPos pos) {
+        for (MultiblockPattern pattern : MultiblockPatterns.get()) {
+            if (tryAssembleMultiblock(pattern, world, pos)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean tryAssembleMultiblock(Identifier patternId, World world, BlockPos pos) {
+        Optional<MultiblockPattern> optional = MultiblockPatterns.get(patternId);
+        return optional.filter(multiblockPattern -> tryAssembleMultiblock(multiblockPattern, world, pos)).isPresent();
+    }
+
+    @Override
+    public boolean tryAssembleMultiblock(MultiblockPattern pattern, World world, BlockPos pos) {
+        if (CardinalComponentsInit.PROVIDER.get(world).getMultiblock(pos).isPresent()) {
+            return true;
+        }
+
+        MatchResult result = PatternTester.tryMatchPattern(pos, world, pattern, MULTIBLOCK_PATTERNS_TO_KEYS.get(pattern.identifier()));
+        if (result.matched()) {
+            MultiblockProvider provider = MULTIBLOCK_PATTERNS_TO_PROVIDERS.get(pattern.identifier());
+
+            if (provider != null) {
+                Multiblock multiblock = provider.getMultiblock(pos, world, result);
+                CardinalComponentsInit.PROVIDER.get(world).addMultiblock(multiblock);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean tryDisassembleMultiblock(Multiblock multiblock, boolean forced) {
+        boolean ableToDisassemble = multiblock.onDisassemble(null, forced);
+        if (ableToDisassemble) {
+            CardinalComponentsInit.PROVIDER.get(multiblock.getWorld()).removeMultiblock(multiblock);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public Optional<Multiblock> getMultiblock(World world, BlockPos pos) {
+        return CardinalComponentsInit.PROVIDER.get(world).getMultiblock(pos);
+    }
+}

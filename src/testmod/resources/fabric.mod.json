@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "multiblocklibtest",
+  "version": "${version}",
+  "name": "Multiblock Lib Test",
+  "description": "Test mod for Multiblock lib",
+  "authors": [
+    "Jamalam360 - Developer"
+  ],
+  "contact": {
+    "homepage": "https://github.com/JamCoreModding/MultiblockLib",
+    "issues": "https://github.com/JamCoreModding/MultiblockLib/issues",
+    "sources": "https://github.com/JamCoreModding/MultiblockLib"
+  },
+  "license": "MIT",
+  "icon": "assets/multiblocklibtest/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.jamalam360.multiblocklib.testmod.TestInit"
+    ]
+  },
+  "mixins": [
+    "multiblocklibtest.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.5",
+    "fabric": "*"
+  }
+}

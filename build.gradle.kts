@@ -35,6 +35,32 @@ dependencies {
     modImplementation(libs.cca.world)
 }
 
+sourceSets {
+    val main = this.getByName("main")
+    this.create("testmod") {
+        this.compileClasspath += main.compileClasspath
+        this.compileClasspath += main.output
+        this.runtimeClasspath += main.runtimeClasspath
+        this.runtimeClasspath += main.output
+    }
+}
+
+loom {
+    runs {
+        this.create("testmodClient") {
+            client()
+            name("Testmod Client")
+            source(sourceSets.getByName("testmod"))
+        }
+
+        this.create("testmodServer") {
+            client()
+            name("Testmod Server")
+            source(sourceSets.getByName("testmod"))
+        }
+    }
+}
+
 tasks {
     processResources {
         inputs.property("version", project.version)

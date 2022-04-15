@@ -26,7 +26,6 @@ package io.github.jamalam360.pattern;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import io.github.jamalam360.MultiblockLib;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;

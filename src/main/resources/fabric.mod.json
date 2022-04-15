@@ -17,8 +17,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.jamalam360.MultiblockEntrypoint",
-      "io.github.jamalam360.test.TestInit"
+      "io.github.jamalam360.MultiblockEntrypoint"
     ],
     "cardinal-components-world": [
       "io.github.jamalam360.components.CardinalComponentsInit"
