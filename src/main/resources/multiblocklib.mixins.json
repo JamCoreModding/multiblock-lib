@@ -4,10 +4,11 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "AbstractBlockMixin",
-    "BlockMixin",
+    "BlockMixin"
+  ],
+  "client": [
     "WorldRendererMixin"
   ],
-  "client": [],
   "server": [],
   "injectors": {
     "defaultRequire": 1
