@@ -23,9 +23,10 @@
  */
 
 package io.github.jamalam360.multiblocklib.testmod;
-import io.github.jamalam360.Multiblock;
+
+import io.github.jamalam360.multiblocklib.api.Multiblock;
 import io.github.jamalam360.multiblocklib.api.MultiblockLib;
-import io.github.jamalam360.pattern.MultiblockPatternKeyBuilder;
+import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPatternKeyBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Blocks;

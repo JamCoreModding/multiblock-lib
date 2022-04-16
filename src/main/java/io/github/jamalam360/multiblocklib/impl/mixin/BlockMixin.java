@@ -22,23 +22,33 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.components;
+package io.github.jamalam360.multiblocklib.impl.mixin;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentV3;
-import io.github.jamalam360.Multiblock;
+import io.github.jamalam360.multiblocklib.api.Multiblock;
+import io.github.jamalam360.multiblocklib.api.MultiblockLib;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import org.jetbrains.annotations.ApiStatus;
+import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
 
-/**
- * @author Jamalam360
- */
-public interface MultiblockProvider extends ComponentV3 {
-    Optional<Multiblock> getMultiblock(BlockPos pos);
-    Multiblock[] getAllMultiblocks();
-    @ApiStatus.Internal
-    void addMultiblock(Multiblock multiblock);
-    @ApiStatus.Internal
-    void removeMultiblock(Multiblock multiblock);
+@Mixin(Block.class)
+public class BlockMixin {
+    /**
+     * Checks if the block is a part of a multiblock, and if it is, tries to disassemble the multiblock.
+     */
+    @Inject(
+            method = "onBreak",
+            at = @At("HEAD")
+    )
+    public void multiblocklib$checkForMultiblockOnBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo ci) {
+        Optional<Multiblock> multiblock = MultiblockLib.INSTANCE.getMultiblock(world, pos);
+        multiblock.ifPresent(value -> MultiblockLib.INSTANCE.tryDisassembleMultiblock(value, true));
+    }
 }

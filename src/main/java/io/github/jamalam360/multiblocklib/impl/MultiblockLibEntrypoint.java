@@ -22,30 +22,20 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.mixin;
+package io.github.jamalam360.multiblocklib.impl;
 
-import io.github.jamalam360.Multiblock;
-import io.github.jamalam360.multiblocklib.api.MultiblockLib;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import io.github.jamalam360.multiblocklib.impl.pattern.resource.MultiblockResourceReloadListener;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.minecraft.resource.ResourceType;
 
-import java.util.Optional;
-
-@Mixin(Block.class)
-public class BlockMixin {
-    @Inject(
-            method = "onBreak",
-            at = @At("HEAD")
-    )
-    public void multiblocklib$checkForMultiblockOnBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo ci) {
-        Optional<Multiblock> multiblock = MultiblockLib.INSTANCE.getMultiblock(world, pos);
-        multiblock.ifPresent(value -> MultiblockLib.INSTANCE.tryDisassembleMultiblock(value, true));
+/**
+ * @author Jamalam360
+ */
+public class MultiblockLibEntrypoint implements ModInitializer {
+    @Override
+    public void onInitialize() {
+        MultiblockLogger.INSTANCE.info("May your blocks be plentiful.");
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MultiblockResourceReloadListener());
     }
 }

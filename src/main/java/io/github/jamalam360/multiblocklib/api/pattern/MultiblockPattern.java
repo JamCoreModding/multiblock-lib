@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.pattern;
+package io.github.jamalam360.multiblocklib.api.pattern;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -30,25 +30,30 @@ import com.google.gson.JsonObject;
 import net.minecraft.util.Identifier;
 
 /**
+ * Represents a multiblock pattern as defined in JSON files in the
+ * {@code /data/[namespace]/multiblock_patterns} directory.
+ *
  * @author Jamalam360
  */
 public record MultiblockPattern(Identifier identifier, Layer[] layers) {
     /**
-     * @return the length of this pattern in the y-axis
+     * @return The length of this pattern in the y-axis
+     * @implNote This is the number of layers in this pattern. The return
+     * value does not take into account repeatable layers.
      */
     public int height() {
         return layers.length;
     }
 
     /**
-     * @return the length of this pattern in the x-axis
+     * @return The length of this pattern in the x-axis
      */
     public int width() {
         return layers[0].rows[0].length();
     }
 
     /**
-     * @return the length of this pattern in the z-axis
+     * @return The length of this pattern in the z-axis
      */
     public int depth() {
         return layers[0].rows.length;

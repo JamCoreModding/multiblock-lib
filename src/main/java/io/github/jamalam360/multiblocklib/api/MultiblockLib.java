@@ -24,9 +24,8 @@
 
 package io.github.jamalam360.multiblocklib.api;
 
-import io.github.jamalam360.Multiblock;
 import io.github.jamalam360.multiblocklib.impl.MultiblockLibImpl;
-import io.github.jamalam360.pattern.MultiblockPattern;
+import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPattern;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -37,6 +36,10 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
+ * The main MultiblockLib API. Responsible for registering {@link Multiblock}s
+ * and assembling/disassembling them.
+ *
+ * @see MultiblockLibImpl
  * @author Jamalam360
  */
 public interface MultiblockLib {
@@ -46,17 +49,15 @@ public interface MultiblockLib {
     //TODO: Assemble from any block on the multiblock
     //TODO: MultiblockContext record
     //TODO: Count the number of each block in the multiblock (util method)
-    //TODO: Move implementation and API into separate packages
     //TODO: Icon
     //TODO: Use gametest API
-    //TODO: Throw if multiblock registered with JSON is not registered in code
 
     MultiblockLib INSTANCE = new MultiblockLibImpl();
 
     /**
-     * @param identifier The {@link Identifier} of the {@link io.github.jamalam360.pattern.MultiblockPattern} to register.
+     * @param identifier The {@link Identifier} of the {@link MultiblockPattern} to register.
      * @param provider   The {@link MultiblockProvider} to register.
-     * @param keys       The {@link Map} of keys to use for the {@link io.github.jamalam360.pattern.MultiblockPattern}.
+     * @param keys       The {@link Map} of keys to use for the {@link MultiblockPattern}.
      */
     void registerMultiblock(Identifier identifier, MultiblockProvider provider, Map<Character, Predicate<CachedBlockPosition>> keys);
 

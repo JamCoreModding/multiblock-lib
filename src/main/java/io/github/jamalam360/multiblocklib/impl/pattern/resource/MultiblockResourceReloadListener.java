@@ -22,10 +22,13 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.pattern;
+package io.github.jamalam360.multiblocklib.impl.pattern.resource;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import io.github.jamalam360.multiblocklib.impl.MultiblockLogger;
+import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPatterns;
+import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPattern;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
@@ -33,8 +36,12 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * Adds all the JSON files in the {@code data/[namespace]/multiblock_patterns} directory to the
+ * {@link MultiblockPatterns} list.
+ *
  * @author Jamalam360
  */
 public class MultiblockResourceReloadListener extends JsonDataLoader implements IdentifiableResourceReloadListener {
@@ -44,11 +51,13 @@ public class MultiblockResourceReloadListener extends JsonDataLoader implements 
 
     @Override
     public void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
-        MultiblockPatterns.clear();
+        MultiblockPatterns.INSTANCE.clear();
+        AtomicInteger count = new AtomicInteger();
         prepared.forEach((id, element) -> {
-            System.out.println("Loading multiblock pattern: " + id);
-            MultiblockPatterns.add(MultiblockPattern.deserialize(id, element));
+            MultiblockPatterns.INSTANCE.add(MultiblockPattern.deserialize(id, element));
+            count.getAndIncrement();
         });
+        MultiblockLogger.INSTANCE.info("Loaded {} multiblock patterns", count.get());
     }
 
     @Override

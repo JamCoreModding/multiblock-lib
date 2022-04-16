@@ -22,13 +22,14 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.components;
+package io.github.jamalam360.multiblocklib.impl.components;
 
 import com.google.common.collect.Maps;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
-import io.github.jamalam360.Multiblock;
+import io.github.jamalam360.multiblocklib.api.Multiblock;
 import io.github.jamalam360.multiblocklib.api.MultiblockLib;
+import io.github.jamalam360.multiblocklib.api.components.MultiblockProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -39,13 +40,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 /**
+ * A cardinal component that stores all created {@link Multiblock}s in the {@link World}.
+ * It is also responsible for ticking {@link Multiblock}s.
+ *
  * @author Jamalam360
  */
 public class MultiblockProviderImpl implements MultiblockProvider, ServerTickingComponent, AutoSyncedComponent {
     private final World provider;
     private final Map<BlockPos[], Multiblock> MULTIBLOCKS = Maps.newHashMap();
 
-    protected MultiblockProviderImpl(World provider) {
+    public MultiblockProviderImpl(World provider) {
         this.provider = provider;
     }
 
@@ -63,7 +67,6 @@ public class MultiblockProviderImpl implements MultiblockProvider, ServerTicking
         BlockPos.stream(multiblock.getBox()).forEach(pos -> positions.add(pos.toImmutable()));
 
         MULTIBLOCKS.put(positions.toArray(new BlockPos[0]), multiblock);
-        System.out.println(MULTIBLOCKS);
     }
 
     @ApiStatus.Internal

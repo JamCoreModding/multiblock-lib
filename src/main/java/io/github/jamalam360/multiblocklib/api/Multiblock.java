@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360;
+package io.github.jamalam360.multiblocklib.api;
 
-import io.github.jamalam360.pattern.MatchResult;
+import io.github.jamalam360.multiblocklib.api.pattern.MatchResult;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;

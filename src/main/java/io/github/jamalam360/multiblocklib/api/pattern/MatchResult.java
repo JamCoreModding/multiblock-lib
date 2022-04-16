@@ -22,22 +22,16 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.components;
+package io.github.jamalam360.multiblocklib.api.pattern;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentKey;
-import dev.onyxstudios.cca.api.v3.component.ComponentRegistryV3;
-import dev.onyxstudios.cca.api.v3.world.WorldComponentFactoryRegistry;
-import dev.onyxstudios.cca.api.v3.world.WorldComponentInitializer;
-import net.minecraft.util.Identifier;
+import io.github.jamalam360.multiblocklib.api.Multiblock;
+import net.minecraft.util.math.BlockBox;
 
 /**
+ * A result of a match that is passed to the {@link Multiblock} so it can keep track
+ * of its dimensions and other information.
+ *
  * @author Jamalam360
  */
-public class CardinalComponentsInit implements WorldComponentInitializer {
-    public static final ComponentKey<MultiblockProviderImpl> PROVIDER = ComponentRegistryV3.INSTANCE.getOrCreate(new Identifier("multiblocklib", "multiblock_provider"), MultiblockProviderImpl.class);
-
-    @Override
-    public void registerWorldComponentFactories(WorldComponentFactoryRegistry registry) {
-        registry.register(PROVIDER, MultiblockProviderImpl::new);
-    }
+public record MatchResult(MultiblockPattern pattern, int height, int width, int depth, BlockBox box) {
 }

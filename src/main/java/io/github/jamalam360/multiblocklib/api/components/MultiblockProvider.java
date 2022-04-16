@@ -22,12 +22,32 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.pattern;
+package io.github.jamalam360.multiblocklib.api.components;
 
-import net.minecraft.util.math.BlockBox;
+import dev.onyxstudios.cca.api.v3.component.ComponentV3;
+import io.github.jamalam360.multiblocklib.api.Multiblock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Optional;
 
 /**
+ * A cardinal component that stores all created {@link Multiblock}s in the {@link World}.
+ *
  * @author Jamalam360
+ * @implSpec The implementation should also tick the {@link Multiblock}s using
+ * {@link Multiblock#tick}, and save them to NBT.
+ * @see io.github.jamalam360.multiblocklib.impl.components.MultiblockProviderImpl
  */
-public record MatchResult(boolean matched, MultiblockPattern pattern, int height, int width, int depth, BlockBox box) {
+public interface MultiblockProvider extends ComponentV3 {
+    Optional<Multiblock> getMultiblock(BlockPos pos);
+
+    Multiblock[] getAllMultiblocks();
+
+    @ApiStatus.Internal
+    void addMultiblock(Multiblock multiblock);
+
+    @ApiStatus.Internal
+    void removeMultiblock(Multiblock multiblock);
 }

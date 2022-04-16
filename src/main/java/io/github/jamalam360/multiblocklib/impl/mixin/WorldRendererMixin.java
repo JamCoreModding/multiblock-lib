@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.mixin;
+package io.github.jamalam360.multiblocklib.impl.mixin;
 
-import io.github.jamalam360.Multiblock;
+import io.github.jamalam360.multiblocklib.api.Multiblock;
 import io.github.jamalam360.multiblocklib.api.MultiblockLib;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumer;
@@ -56,6 +56,10 @@ public abstract class WorldRendererMixin {
     private static void drawShapeOutline(MatrixStack matrices, VertexConsumer vertexConsumer, VoxelShape voxelShape, double d, double e, double f, float g, float h, float i, float j) {
     }
 
+    /**
+     * Checks if the block is a multiblock and if so, renders the multiblocks outline (from the bottom left of
+     * the multiblock), rather than rendering the blocks outline.
+     */
     @Inject(
             method = "drawBlockOutline",
             at = @At("HEAD"),

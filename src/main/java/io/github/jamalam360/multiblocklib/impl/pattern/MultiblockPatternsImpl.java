@@ -22,9 +22,12 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.pattern;
+package io.github.jamalam360.multiblocklib.impl.pattern;
 
+import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPatterns;
+import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPattern;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,16 +36,23 @@ import java.util.Optional;
 /**
  * @author Jamalam360
  */
-public class MultiblockPatterns {
+public class MultiblockPatternsImpl implements MultiblockPatterns {
     protected static final List<MultiblockPattern> PATTERNS = new ArrayList<>();
 
-    public static List<MultiblockPattern> get() {
-        return PATTERNS;
+    @Override
+    public MultiblockPattern[] getPatterns() {
+        return PATTERNS.toArray(new MultiblockPattern[0]);
     }
 
-    public static Optional<MultiblockPattern> get(Identifier identifier) {
+    @Override
+    public MultiblockPattern[] getPatterns(String namespace) {
+        return PATTERNS.stream().filter(pattern -> pattern.identifier().getNamespace().equals(namespace)).toArray(MultiblockPattern[]::new);
+    }
+
+    @Override
+    public Optional<MultiblockPattern> getPattern(Identifier id) {
         for (MultiblockPattern pattern : PATTERNS) {
-            if (pattern.identifier().equals(identifier)) {
+            if (pattern.identifier().equals(id)) {
                 return Optional.of(pattern);
             }
         }
@@ -50,11 +60,15 @@ public class MultiblockPatterns {
         return Optional.empty();
     }
 
-    protected static void add(MultiblockPattern pattern) {
+    @ApiStatus.Internal
+    @Override
+    public void add(MultiblockPattern pattern) {
         PATTERNS.add(pattern);
     }
 
-    protected static void clear() {
+    @ApiStatus.Internal
+    @Override
+    public void clear() {
         PATTERNS.clear();
     }
 }

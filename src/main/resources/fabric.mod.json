@@ -17,10 +17,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.jamalam360.MultiblockEntrypoint"
+      "io.github.jamalam360.multiblocklib.impl.MultiblockLibEntrypoint"
     ],
     "cardinal-components-world": [
-      "io.github.jamalam360.components.CardinalComponentsInit"
+      "io.github.jamalam360.multiblocklib.impl.MultiblockComponentsInit"
     ]
   },
   "mixins": [

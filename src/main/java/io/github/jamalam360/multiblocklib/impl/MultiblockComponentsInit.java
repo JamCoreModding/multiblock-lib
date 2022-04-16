@@ -22,34 +22,23 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.pattern;
+package io.github.jamalam360.multiblocklib.impl;
 
-import com.google.common.collect.Maps;
-import net.minecraft.block.pattern.CachedBlockPosition;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Predicate;
+import dev.onyxstudios.cca.api.v3.component.ComponentKey;
+import dev.onyxstudios.cca.api.v3.component.ComponentRegistryV3;
+import dev.onyxstudios.cca.api.v3.world.WorldComponentFactoryRegistry;
+import dev.onyxstudios.cca.api.v3.world.WorldComponentInitializer;
+import io.github.jamalam360.multiblocklib.impl.components.MultiblockProviderImpl;
+import net.minecraft.util.Identifier;
 
 /**
- * Wraps around a {@link HashMap} to provide a nice API with `where` rather than `put`
  * @author Jamalam360
  */
-public class MultiblockPatternKeyBuilder {
-    private final Map<Character, Predicate<CachedBlockPosition>> keys = Maps.newHashMap();
+public class MultiblockComponentsInit implements WorldComponentInitializer {
+    public static final ComponentKey<MultiblockProviderImpl> PROVIDER = ComponentRegistryV3.INSTANCE.getOrCreate(new Identifier("multiblocklib", "multiblock_provider"), MultiblockProviderImpl.class);
 
-    private MultiblockPatternKeyBuilder(){}
-
-    public static MultiblockPatternKeyBuilder start(){
-        return new MultiblockPatternKeyBuilder();
-    }
-
-    public MultiblockPatternKeyBuilder where(char key, Predicate<CachedBlockPosition> predicate) {
-        keys.put(key, predicate);
-        return this;
-    }
-
-    public Map<Character, Predicate<CachedBlockPosition>> build(){
-        return keys;
+    @Override
+    public void registerWorldComponentFactories(WorldComponentFactoryRegistry registry) {
+        registry.register(PROVIDER, MultiblockProviderImpl::new);
     }
 }

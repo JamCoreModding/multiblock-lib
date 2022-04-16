@@ -24,14 +24,16 @@
 
 package io.github.jamalam360.multiblocklib.api;
 
-import io.github.jamalam360.Multiblock;
-import io.github.jamalam360.pattern.MatchResult;
+import io.github.jamalam360.multiblocklib.api.pattern.MatchResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
+ * Used by {@link MultiblockLib#tryAssembleMultiblock} to create a {@link Multiblock} instance.
+ *
  * @author Jamalam360
  */
+@FunctionalInterface
 public interface MultiblockProvider {
     Multiblock getMultiblock(BlockPos pos, World world, MatchResult match);
 }

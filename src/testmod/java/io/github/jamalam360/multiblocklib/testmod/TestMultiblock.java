@@ -24,9 +24,9 @@
 
 package io.github.jamalam360.multiblocklib.testmod;
 
-import io.github.jamalam360.Multiblock;
-import io.github.jamalam360.MultiblockContext;
-import io.github.jamalam360.pattern.MatchResult;
+import io.github.jamalam360.multiblocklib.api.Multiblock;
+import io.github.jamalam360.multiblocklib.api.MultiblockContext;
+import io.github.jamalam360.multiblocklib.api.pattern.MatchResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

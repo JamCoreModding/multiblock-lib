@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360;
+package io.github.jamalam360.multiblocklib.api;
 
 /**
  * @author Jamalam360

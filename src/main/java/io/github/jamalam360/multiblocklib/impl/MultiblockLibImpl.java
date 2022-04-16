@@ -25,14 +25,13 @@
 package io.github.jamalam360.multiblocklib.impl;
 
 import com.google.common.collect.Maps;
-import io.github.jamalam360.Multiblock;
-import io.github.jamalam360.components.CardinalComponentsInit;
+import io.github.jamalam360.multiblocklib.api.Multiblock;
 import io.github.jamalam360.multiblocklib.api.MultiblockLib;
 import io.github.jamalam360.multiblocklib.api.MultiblockProvider;
-import io.github.jamalam360.pattern.MatchResult;
-import io.github.jamalam360.pattern.MultiblockPattern;
-import io.github.jamalam360.pattern.MultiblockPatterns;
-import io.github.jamalam360.pattern.PatternTester;
+import io.github.jamalam360.multiblocklib.api.pattern.MatchResult;
+import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPattern;
+import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPatternMatcher;
+import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPatterns;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -59,7 +58,7 @@ public class MultiblockLibImpl implements MultiblockLib {
 
     @Override
     public boolean tryAssembleMultiblock(World world, BlockPos pos) {
-        for (MultiblockPattern pattern : MultiblockPatterns.get()) {
+        for (MultiblockPattern pattern : MultiblockPatterns.INSTANCE.getPatterns()) {
             if (tryAssembleMultiblock(pattern, world, pos)) {
                 return true;
             }
@@ -70,25 +69,32 @@ public class MultiblockLibImpl implements MultiblockLib {
 
     @Override
     public boolean tryAssembleMultiblock(Identifier patternId, World world, BlockPos pos) {
-        Optional<MultiblockPattern> optional = MultiblockPatterns.get(patternId);
+        Optional<MultiblockPattern> optional = MultiblockPatterns.INSTANCE.getPattern(patternId);
         return optional.filter(multiblockPattern -> tryAssembleMultiblock(multiblockPattern, world, pos)).isPresent();
     }
 
     @Override
     public boolean tryAssembleMultiblock(MultiblockPattern pattern, World world, BlockPos pos) {
-        if (CardinalComponentsInit.PROVIDER.get(world).getMultiblock(pos).isPresent()) {
+        if (MultiblockComponentsInit.PROVIDER.get(world).getMultiblock(pos).isPresent()) {
             return true;
         }
 
-        MatchResult result = PatternTester.tryMatchPattern(pos, world, pattern, MULTIBLOCK_PATTERNS_TO_KEYS.get(pattern.identifier()));
-        if (result.matched()) {
-            MultiblockProvider provider = MULTIBLOCK_PATTERNS_TO_PROVIDERS.get(pattern.identifier());
+        if (!MULTIBLOCK_PATTERNS_TO_KEYS.containsKey(pattern.identifier())) {
+            MultiblockLogger.INSTANCE.error("No multiblock keys registered for pattern: " + pattern.identifier());
+            throw new IllegalStateException();
+        }
 
-            if (provider != null) {
-                Multiblock multiblock = provider.getMultiblock(pos, world, result);
-                CardinalComponentsInit.PROVIDER.get(world).addMultiblock(multiblock);
-                return true;
+        Optional<MatchResult> result = MultiblockPatternMatcher.INSTANCE.tryMatchPattern(pos, world, pattern, MULTIBLOCK_PATTERNS_TO_KEYS.get(pattern.identifier()));
+        if (result.isPresent()) {
+            if (!MULTIBLOCK_PATTERNS_TO_PROVIDERS.containsKey(pattern.identifier())) {
+                MultiblockLogger.INSTANCE.error("No multiblock provider registered for multiblock pattern: " + pattern.identifier());
+                throw new IllegalStateException();
             }
+
+            MultiblockProvider provider = MULTIBLOCK_PATTERNS_TO_PROVIDERS.get(pattern.identifier());
+            Multiblock multiblock = provider.getMultiblock(pos, world, result.get());
+            MultiblockComponentsInit.PROVIDER.get(world).addMultiblock(multiblock);
+            return true;
         }
 
         return false;
@@ -98,7 +104,7 @@ public class MultiblockLibImpl implements MultiblockLib {
     public boolean tryDisassembleMultiblock(Multiblock multiblock, boolean forced) {
         boolean ableToDisassemble = multiblock.onDisassemble(null, forced);
         if (ableToDisassemble) {
-            CardinalComponentsInit.PROVIDER.get(multiblock.getWorld()).removeMultiblock(multiblock);
+            MultiblockComponentsInit.PROVIDER.get(multiblock.getWorld()).removeMultiblock(multiblock);
             return true;
         }
 
@@ -107,6 +113,6 @@ public class MultiblockLibImpl implements MultiblockLib {
 
     @Override
     public Optional<Multiblock> getMultiblock(World world, BlockPos pos) {
-        return CardinalComponentsInit.PROVIDER.get(world).getMultiblock(pos);
+        return MultiblockComponentsInit.PROVIDER.get(world).getMultiblock(pos);
     }
 }

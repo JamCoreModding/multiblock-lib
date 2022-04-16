@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "io.github.jamalam360.mixin",
+  "package": "io.github.jamalam360.multiblocklib.impl.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "BlockMixin",
