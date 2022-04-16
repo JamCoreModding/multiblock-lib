@@ -101,16 +101,23 @@ publishing {
     }
 
     repositories {
-        if (project.rootProject.file("local.properties").exists()) {
-            val localProperties = Properties()
-            localProperties.load(project.rootProject.file("local.properties").inputStream())
-
+        if (project.rootProject.file("local.properties").exists()
+            || (System.getenv()["MAVEN_USERNAME"] != null
+                    && System.getenv()["MAVEN_PASSWORD"] != null)
+        ) {
             maven {
                 name = "JamalamMavenRelease"
                 url = uri("https://maven.jamalam.tech/releases")
                 credentials {
-                    username = localProperties["MAVEN_USERNAME"] as String
-                    password = localProperties["MAVEN_PASSWORD"] as String
+                    if (project.rootProject.file("local.properties").exists()) {
+                        val localProperties = Properties()
+                        localProperties.load(project.rootProject.file("local.properties").inputStream())
+                        username = localProperties["MAVEN_USERNAME"] as String
+                        password = localProperties["MAVEN_PASSWORD"] as String
+                    } else {
+                        username = System.getenv()["MAVEN_USERNAME"]!!
+                        password = System.getenv()["MAVEN_PASSWORD"]!!
+                    }
                 }
             }
         }
