@@ -78,11 +78,11 @@ tasks {
     }
 
     jar {
-        archiveBaseName.set("MultiblockLib")
+        archiveBaseName.set("multiblocklib")
     }
 
     remapJar {
-        archiveBaseName.set("MultiblockLib")
+        archiveBaseName.set("multiblocklib")
     }
 
     withType<JavaCompile> {
