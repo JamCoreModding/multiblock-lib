@@ -94,7 +94,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "io.github.jamalam360"
-            artifactId = "multiblock-lib"
+            artifactId = "multiblocklib"
             version = modVersion
             from(components["java"])
         }

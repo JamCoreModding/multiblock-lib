@@ -10,7 +10,7 @@ A WIP library for the Fabric modloader to help easily create multiblock structur
     }
 
     dependencies {
-        modImplementation 'io.github.jamalam360:multiblock-lib:{VERSION}'
+        modImplementation 'io.github.jamalam360:multiblocklib:{VERSION}'
     }
 ```
 
