@@ -1,4 +1,4 @@
-A WIP library for the Fabric modloader to help easily create multiblock structures (e.g. machines) in Minecraft.
+A **WIP** library for the Fabric modloader to help easily create multiblock structures (e.g. machines) in Minecraft.
 
 [Support Server](https://discord.jamalam.tech/)
 
