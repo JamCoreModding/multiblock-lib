@@ -25,7 +25,6 @@
 package io.github.jamalam360.multiblocklib.testmod;
 
 import io.github.jamalam360.multiblocklib.api.Multiblock;
-import io.github.jamalam360.multiblocklib.api.MultiblockContext;
 import io.github.jamalam360.multiblocklib.api.pattern.MatchResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -36,9 +35,5 @@ import net.minecraft.world.World;
 public class TestMultiblock extends Multiblock {
     public TestMultiblock(BlockPos pos, World world, MatchResult match) {
         super(pos, world, match);
-    }
-
-    @Override
-    public void tick(MultiblockContext context) {
     }
 }

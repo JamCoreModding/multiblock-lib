@@ -81,14 +81,14 @@ public class MultiblockLibImpl implements MultiblockLib {
 
         if (!MULTIBLOCK_PATTERNS_TO_KEYS.containsKey(pattern.identifier())) {
             MultiblockLogger.INSTANCE.error("No multiblock keys registered for pattern: " + pattern.identifier());
-            throw new IllegalStateException();
+            throw new IllegalStateException("No multiblock keys registered for pattern: " + pattern.identifier());
         }
 
         Optional<MatchResult> result = MultiblockPatternMatcher.INSTANCE.tryMatchPattern(pos, world, pattern, MULTIBLOCK_PATTERNS_TO_KEYS.get(pattern.identifier()));
         if (result.isPresent()) {
             if (!MULTIBLOCK_PATTERNS_TO_PROVIDERS.containsKey(pattern.identifier())) {
                 MultiblockLogger.INSTANCE.error("No multiblock provider registered for multiblock pattern: " + pattern.identifier());
-                throw new IllegalStateException();
+                throw new IllegalStateException("No multiblock provider registered for multiblock pattern: " + pattern.identifier());
             }
 
             MultiblockProvider provider = MULTIBLOCK_PATTERNS_TO_PROVIDERS.get(pattern.identifier());
@@ -102,7 +102,7 @@ public class MultiblockLibImpl implements MultiblockLib {
 
     @Override
     public boolean tryDisassembleMultiblock(Multiblock multiblock, boolean forced) {
-        boolean ableToDisassemble = multiblock.onDisassemble(null, forced);
+        boolean ableToDisassemble = multiblock.onDisassemble( forced);
         if (ableToDisassemble) {
             MultiblockComponentsInit.PROVIDER.get(multiblock.getWorld()).removeMultiblock(multiblock);
             return true;

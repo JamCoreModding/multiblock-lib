@@ -26,6 +26,7 @@ package io.github.jamalam360.multiblocklib.impl.mixin;
 
 import io.github.jamalam360.multiblocklib.api.Multiblock;
 import io.github.jamalam360.multiblocklib.api.MultiblockLib;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,7 +40,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Optional;
 
 @Mixin(Block.class)
-public class BlockMixin {
+public abstract class BlockMixin extends AbstractBlock {
+    private BlockMixin(Settings settings) {
+        super(settings);
+    }
+
     /**
      * Checks if the block is a part of a multiblock, and if it is, tries to disassemble the multiblock.
      */

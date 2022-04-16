@@ -29,6 +29,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -37,6 +39,7 @@ import net.minecraft.world.World;
 /**
  * @author Jamalam360
  */
+@SuppressWarnings("unused")
 public abstract class Multiblock {
     private final BlockPos bottomLeftPos;
     private final World world;
@@ -50,6 +53,35 @@ public abstract class Multiblock {
         this.matchResult = match;
         this.box = match.box();
         this.shape = Block.createCuboidShape(0, 0, 0, match.width() * 16, match.height() * 16, match.depth() * 16);
+    }
+
+    public void tick() {
+    }
+
+    public ActionResult onUse(World world, BlockPos clickPos, PlayerEntity player, Hand hand, BlockHitResult hitResult) {
+        return ActionResult.PASS;
+    }
+
+    public void onNeighborUpdate(BlockPos pos, BlockPos neighborPos) {
+    }
+
+    /**
+     * @param forced Whether this multiblock is being disassembled forcefully (i.e. one of its blocks was broken)
+     * @return Whether the multiblock can be disassembled. It is recommended to return true if forced is true.
+     */
+    public boolean onDisassemble(boolean forced) {
+        return true;
+    }
+
+    public VoxelShape getOutlineShape() {
+        return shape;
+    }
+
+    public NbtCompound writeTag() {
+        return new NbtCompound();
+    }
+
+    public void readTag(NbtCompound tag) {
     }
 
     public BlockPos getBottomLeftPos() {
@@ -66,32 +98,5 @@ public abstract class Multiblock {
 
     public BlockBox getBox() {
         return box;
-    }
-
-    public void tick(MultiblockContext context) {
-    }
-
-    public ActionResult onUse(PlayerEntity user, BlockPos clickPos, MultiblockContext context) {
-        return ActionResult.PASS;
-    }
-
-    public VoxelShape getOutlineShape(MultiblockContext context) {
-        return shape;
-    }
-
-    public NbtCompound writeTag() {
-        return new NbtCompound();
-    }
-
-    public void readTag(NbtCompound tag) {
-    }
-
-    /**
-     * @param context The context.
-     * @param forced  Whether this multiblock is being disassembled forcefully (i.e. one of its blocks was broken)
-     * @return Whether the multiblock can be disassembled. It is recommended to return true if forced is true.
-     */
-    public boolean onDisassemble(MultiblockContext context, boolean forced) {
-        return true;
     }
 }

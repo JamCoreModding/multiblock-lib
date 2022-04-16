@@ -1,0 +1,42 @@
+{
+  "layers": [
+    {
+      "rows": [
+        "LLLLL",
+        "LPPPL",
+        "LPPPL",
+        "LPPPL",
+        "LLLLL"
+      ]
+    },
+    {
+      "min": 2,
+      "max": 2,
+      "rows": [
+        "LPPPL",
+        "PPPPP",
+        "PPPPP",
+        "PPPPP",
+        "LPPPL"
+      ]
+    },
+    {
+      "rows": [
+        "LPPPL",
+        "PPPPP",
+        "IPPPP",
+        "PPPPP",
+        "LPPPL"
+      ]
+    },
+    {
+      "rows": [
+        "LLLLL",
+        "LPPPL",
+        "IPPPL",
+        "LPPPL",
+        "LLLLL"
+      ]
+    }
+  ]
+}

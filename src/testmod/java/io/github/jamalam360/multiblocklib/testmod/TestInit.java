@@ -34,7 +34,9 @@ import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -58,7 +60,17 @@ public class TestInit implements ModInitializer {
         MultiblockLib.INSTANCE.registerMultiblock(new Identifier("multiblocklibtest", "other"), TestMultiblock::new, DEFAULT_KEYS);
         MultiblockLib.INSTANCE.registerMultiblock(new Identifier("multiblocklibtest", "test"), TestMultiblock::new, DEFAULT_KEYS);
 
-        Registry.register(Registry.ITEM, new Identifier("multiblocklib", "test_assembler"), new TestAssemblerItem());
+        MultiblockLib.INSTANCE.registerMultiblock(
+                new Identifier("multiblocklibtest", "big_chest"),
+                BigChestMultiblock::new,
+                MultiblockPatternKeyBuilder.start()
+                        .where('L', CachedBlockPosition.matchesBlockState(state -> state.isIn(BlockTags.LOGS)))
+                        .where('P', CachedBlockPosition.matchesBlockState(state -> state.isIn(BlockTags.PLANKS)))
+                        .where('I', CachedBlockPosition.matchesBlockState(state -> state.isOf(Blocks.IRON_BLOCK)))
+                        .build()
+        );
+
+        Registry.register(Registry.ITEM, new Identifier("multiblocklibtest", "test_assembler"), new TestAssemblerItem());
     }
 
     static class TestAssemblerItem extends Item {

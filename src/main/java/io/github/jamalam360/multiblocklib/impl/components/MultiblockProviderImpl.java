@@ -56,7 +56,7 @@ public class MultiblockProviderImpl implements MultiblockProvider, ServerTicking
     @Override
     public void serverTick() {
         for (Multiblock multiblock : getAllMultiblocks()) {
-            multiblock.tick(null);
+            multiblock.tick();
         }
     }
 
