@@ -6,7 +6,7 @@ env:
   MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
 
 jobs:
-  build:
+  publish:
     strategy:
       matrix:
         java: [
