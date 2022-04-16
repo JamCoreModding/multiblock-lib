@@ -44,7 +44,6 @@ import java.util.function.Predicate;
  */
 public interface MultiblockLib {
     //TODO: Assemble from any block on the multiblock
-    //TODO: Use gametest API
 
     MultiblockLib INSTANCE = new MultiblockLibImpl();
 
