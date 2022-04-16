@@ -26,6 +26,12 @@ package io.github.jamalam360.multiblocklib.testmod;
 
 import io.github.jamalam360.multiblocklib.api.Multiblock;
 import io.github.jamalam360.multiblocklib.api.pattern.MatchResult;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.LiteralText;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -35,5 +41,14 @@ import net.minecraft.world.World;
 public class TestMultiblock extends Multiblock {
     public TestMultiblock(BlockPos pos, World world, MatchResult match) {
         super(pos, world, match);
+    }
+
+    @Override
+    public ActionResult onUse(World world, BlockPos clickPos, PlayerEntity player, Hand hand, BlockHitResult hitResult) {
+        if (!world.isClient) {
+            player.sendMessage(new LiteralText(getBlocks(Blocks.IRON_BLOCK).size() + " iron blocks"), false);
+        }
+
+        return ActionResult.SUCCESS;
     }
 }

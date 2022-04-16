@@ -43,10 +43,7 @@ import java.util.function.Predicate;
  * @author Jamalam360
  */
 public interface MultiblockLib {
-    //TODO: Flesh out the multiblock API with more methods (click, neighbor state change, etc.)
     //TODO: Assemble from any block on the multiblock
-    //TODO: MultiblockContext record
-    //TODO: Count the number of each block in the multiblock (util method)
     //TODO: Use gametest API
 
     MultiblockLib INSTANCE = new MultiblockLibImpl();

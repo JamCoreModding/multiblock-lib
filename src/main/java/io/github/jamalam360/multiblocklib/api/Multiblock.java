@@ -26,6 +26,8 @@ package io.github.jamalam360.multiblocklib.api;
 
 import io.github.jamalam360.multiblocklib.api.pattern.MatchResult;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ActionResult;
@@ -35,6 +37,9 @@ import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author Jamalam360
@@ -82,6 +87,17 @@ public abstract class Multiblock {
     }
 
     public void readTag(NbtCompound tag) {
+    }
+
+    public List<BlockState> getBlocks(Block block) {
+        return getBlocks((cachedBlockPosition -> cachedBlockPosition.getBlockState().isOf(block)));
+    }
+
+    public List<BlockState> getBlocks(Predicate<CachedBlockPosition> predicate) {
+        return BlockPos.stream(box)
+                .filter((blockPos) -> predicate.test(new CachedBlockPosition(world, blockPos, true)))
+                .map(world::getBlockState)
+                .toList();
     }
 
     public BlockPos getBottomLeftPos() {
