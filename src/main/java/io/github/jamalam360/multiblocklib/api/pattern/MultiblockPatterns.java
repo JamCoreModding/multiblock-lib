@@ -39,6 +39,7 @@ import java.util.Optional;
  */
 public interface MultiblockPatterns {
     MultiblockPatterns INSTANCE = new MultiblockPatternsImpl();
+    int LATEST_VERSION = 1;
 
     /**
      * @return All patterns that have been discovered and registered (all discovered JSON files).

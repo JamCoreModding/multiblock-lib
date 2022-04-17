@@ -61,13 +61,21 @@ public record MultiblockPattern(Identifier identifier, Layer[] layers) {
 
     public static MultiblockPattern deserialize(Identifier id, JsonElement json) {
         JsonObject obj = json.getAsJsonObject();
-        JsonArray layers = obj.get("layers").getAsJsonArray();
-        Layer[] layerArray = new Layer[layers.size()];
-        for (int i = 0; i < layers.size(); i++) {
-            layerArray[i] = Layer.deserialize(layers.get(i));
+        int version = obj.has("version") ? obj.get("version").getAsInt() : MultiblockPatterns.LATEST_VERSION;
+
+        switch (version) {
+            case 1:
+                JsonArray layers = obj.get("layers").getAsJsonArray();
+                Layer[] layerArray = new Layer[layers.size()];
+                for (int i = 0; i < layers.size(); i++) {
+                    layerArray[i] = Layer.deserialize(layers.get(i));
+                }
+
+                return new MultiblockPattern(id, layerArray);
+            default:
+                throw new IllegalArgumentException("Unknown version " + version + " for pattern " + id);
         }
 
-        return new MultiblockPattern(id, layerArray);
     }
 
     public record Layer(int min, int max, String[] rows) {

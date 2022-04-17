@@ -30,6 +30,7 @@ match one or many `BlockStates`.
 
 ```json
 {
+  "version": 1,
   "layers": [
     {
       "rows": [
@@ -57,6 +58,11 @@ match one or many `BlockStates`.
   ]
 }
 ```
+
+While the `version` field is not required, it is recommended to explicitly specify the version
+to ensure the JSON is parsed correctly regardless of updates to the schema.
+
+**The current latest JSON version is _1_.**
 
 A JSON file such as the one above creates a multiblock like this:
 
