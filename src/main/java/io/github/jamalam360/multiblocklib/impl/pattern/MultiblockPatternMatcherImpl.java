@@ -56,6 +56,7 @@ public class MultiblockPatternMatcherImpl implements MultiblockPatternMatcher {
         int layerNumber = 0;
         int loopCount = 0;
         BlockPos finalPos = bottomLeft.mutableCopy().toImmutable();
+        BlockPos.Mutable mutable = new BlockPos.Mutable();
         while (!checkedAllLayers) {
             if (layerNumber >= pattern.layers().length) {
                 checkedAllLayers = true;
@@ -81,7 +82,6 @@ public class MultiblockPatternMatcherImpl implements MultiblockPatternMatcher {
 
             boolean layerIsRepeatable = layer.min() != 1 && layer.max() != 1;
 
-            BlockPos.Mutable mutable = new BlockPos.Mutable();
             mutable.setX(bottomLeft.getX());
             mutable.setY(bottomLeft.getY() + loopCount);
             mutable.setZ(bottomLeft.getZ());
@@ -114,26 +114,8 @@ public class MultiblockPatternMatcherImpl implements MultiblockPatternMatcher {
             finalPos = mutable.toImmutable();
         }
 
-        BlockBox box = null;
-
-        switch (direction) {
-            case NORTH -> box = new BlockBox(
-                    bottomLeft.getX() - pattern.width(), bottomLeft.getY() + loopCount, bottomLeft.getZ() - pattern.depth(),
-                    bottomLeft.getX(), bottomLeft.getY(), bottomLeft.getZ()
-            );
-            case SOUTH -> box = new BlockBox(
-                    bottomLeft.getX(), bottomLeft.getY(), bottomLeft.getZ(),
-                    bottomLeft.getX() - pattern.width(), bottomLeft.getY() + loopCount, bottomLeft.getZ() + pattern.depth()
-            );
-            case EAST -> box = BlockBox.create(bottomLeft, finalPos);
-            case WEST -> box = new BlockBox(
-                    bottomLeft.getX(), bottomLeft.getY(), bottomLeft.getZ(),
-                    bottomLeft.getX() - pattern.width(), bottomLeft.getY() + loopCount, bottomLeft.getZ() - pattern.depth()
-            );
-        }
-
         return Optional.of(
-                new MatchResult(pattern, loopCount, pattern.width(), pattern.depth(), box)
+                new MatchResult(pattern, bottomLeft, correctToBottomLeft(pattern, bottomLeft, direction) , BlockBox.create(bottomLeft, finalPos), loopCount, pattern.width(), pattern.depth())
         );
     }
 
@@ -204,6 +186,18 @@ public class MultiblockPatternMatcherImpl implements MultiblockPatternMatcher {
         }
 
         return blocks;
+    }
+
+    private BlockPos correctToBottomLeft(MultiblockPattern pattern, BlockPos bottomLeft, Direction direction) {
+        BlockPos newPos = null;
+        switch (direction) {
+            case NORTH -> newPos = bottomLeft.add(0, 0, -(pattern.width() - 1));
+            case SOUTH -> newPos = bottomLeft.add(-(pattern.depth() - 1), 0, 0);
+            case EAST -> newPos = bottomLeft;
+            case WEST -> newPos = bottomLeft.add(-(pattern.depth() - 1), 0, -(pattern.width() - 1));
+        }
+
+        return newPos;
     }
 
     /**

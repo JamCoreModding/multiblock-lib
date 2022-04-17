@@ -46,17 +46,13 @@ import java.util.function.Predicate;
  */
 @SuppressWarnings("unused")
 public abstract class Multiblock {
-    private final BlockPos bottomLeftPos;
     private final World world;
     private final MatchResult matchResult;
-    private final BlockBox box;
     private final VoxelShape shape;
 
-    public Multiblock(BlockPos pos, World world, MatchResult match) {
-        this.bottomLeftPos = pos;
+    public Multiblock(World world, MatchResult match) {
         this.world = world;
         this.matchResult = match;
-        this.box = match.box();
         this.shape = Block.createCuboidShape(0, 0, 0, match.width() * 16, match.height() * 16, match.depth() * 16);
     }
 
@@ -94,14 +90,10 @@ public abstract class Multiblock {
     }
 
     public List<BlockState> getBlocks(Predicate<CachedBlockPosition> predicate) {
-        return BlockPos.stream(box)
+        return BlockPos.stream(matchResult.box())
                 .filter((blockPos) -> predicate.test(new CachedBlockPosition(world, blockPos, true)))
                 .map(world::getBlockState)
                 .toList();
-    }
-
-    public BlockPos getBottomLeftPos() {
-        return bottomLeftPos;
     }
 
     public World getWorld() {
@@ -110,9 +102,5 @@ public abstract class Multiblock {
 
     public MatchResult getMatchResult() {
         return matchResult;
-    }
-
-    public BlockBox getBox() {
-        return box;
     }
 }

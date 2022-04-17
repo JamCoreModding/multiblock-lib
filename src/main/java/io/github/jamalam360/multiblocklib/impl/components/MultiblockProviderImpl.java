@@ -65,7 +65,7 @@ public class MultiblockProviderImpl implements MultiblockProvider, ServerTicking
     @Override
     public void addMultiblock(Multiblock multiblock) {
         List<BlockPos> positions = new ArrayList<>();
-        BlockPos.stream(multiblock.getBox()).forEach(pos -> positions.add(pos.toImmutable()));
+        BlockPos.stream(multiblock.getMatchResult().box()).forEach(pos -> positions.add(pos.toImmutable()));
 
         MULTIBLOCKS.put(positions.toArray(new BlockPos[0]), multiblock);
     }
@@ -111,7 +111,7 @@ public class MultiblockProviderImpl implements MultiblockProvider, ServerTicking
         for (Map.Entry<BlockPos[], Multiblock> entry : MULTIBLOCKS.entrySet()) {
             multiblockNumber++;
             NbtCompound multiblockTag = new NbtCompound();
-            multiblockTag.putIntArray("BottomLeft", new int[]{entry.getValue().getBottomLeftPos().getX(), entry.getValue().getBottomLeftPos().getY(), entry.getValue().getBottomLeftPos().getZ()});
+            multiblockTag.putIntArray("BottomLeft", new int[]{entry.getValue().getMatchResult().bottomLeftPos().getX(), entry.getValue().getMatchResult().bottomLeftPos().getY(), entry.getValue().getMatchResult().bottomLeftPos().getZ()});
             multiblockTag.putString("PatternIdentifier", entry.getValue().getMatchResult().pattern().identifier().toString());
             multiblockTag.put("MultiblockTag", entry.getValue().writeTag());
             compound.put("Multiblock" + multiblockNumber, multiblockTag);

@@ -71,10 +71,10 @@ public abstract class WorldRendererMixin {
             drawShapeOutline(
                     matrices,
                     vertexConsumer,
-                    multiblock.get().getOutlineShape(), //TODO: Pass context
-                    (double) multiblock.get().getBottomLeftPos().getX() - d,
-                    (double) multiblock.get().getBottomLeftPos().getY() - e,
-                    (double) multiblock.get().getBottomLeftPos().getZ() - f,
+                    multiblock.get().getOutlineShape(),
+                    (double) multiblock.get().getMatchResult().bottomLeftPosCorrected().getX() - d,
+                    (double) multiblock.get().getMatchResult().bottomLeftPosCorrected().getY() - e,
+                    (double) multiblock.get().getMatchResult().bottomLeftPosCorrected().getZ() - f,
                     0.0F,
                     0.0F,
                     0.0F,

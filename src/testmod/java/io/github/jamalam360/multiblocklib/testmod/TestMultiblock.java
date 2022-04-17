@@ -39,8 +39,8 @@ import net.minecraft.world.World;
  * @author Jamalam360
  */
 public class TestMultiblock extends Multiblock {
-    public TestMultiblock(BlockPos pos, World world, MatchResult match) {
-        super(pos, world, match);
+    public TestMultiblock(World world, MatchResult match) {
+        super(world, match);
     }
 
     @Override

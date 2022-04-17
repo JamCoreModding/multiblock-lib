@@ -35,5 +35,5 @@ import net.minecraft.world.World;
  */
 @FunctionalInterface
 public interface MultiblockProvider {
-    Multiblock getMultiblock(BlockPos pos, World world, MatchResult match);
+    Multiblock getMultiblock(World world, MatchResult match);
 }

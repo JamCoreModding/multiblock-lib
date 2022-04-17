@@ -93,7 +93,7 @@ public class MultiblockLibImpl implements MultiblockLib {
             }
 
             MultiblockProvider provider = MULTIBLOCK_PATTERNS_TO_PROVIDERS.get(pattern.identifier());
-            Multiblock multiblock = provider.getMultiblock(pos, world, result.get());
+            Multiblock multiblock = provider.getMultiblock(world, result.get());
             MultiblockComponentsInit.PROVIDER.get(world).addMultiblock(multiblock);
             return true;
         }

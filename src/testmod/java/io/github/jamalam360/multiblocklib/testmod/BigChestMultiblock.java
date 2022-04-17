@@ -48,8 +48,8 @@ import org.jetbrains.annotations.Nullable;
 public class BigChestMultiblock extends Multiblock implements NamedScreenHandlerFactory {
     private final SimpleInventory inventory = new SimpleInventory(54);
 
-    public BigChestMultiblock(BlockPos pos, World world, MatchResult match) {
-        super(pos, world, match);
+    public BigChestMultiblock(World world, MatchResult match) {
+        super(world, match);
     }
 
     @Override

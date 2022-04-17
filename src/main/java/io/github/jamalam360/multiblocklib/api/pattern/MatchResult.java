@@ -26,6 +26,7 @@ package io.github.jamalam360.multiblocklib.api.pattern;
 
 import io.github.jamalam360.multiblocklib.api.Multiblock;
 import net.minecraft.util.math.BlockBox;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * A result of a match that is passed to the {@link Multiblock} so it can keep track
@@ -33,5 +34,6 @@ import net.minecraft.util.math.BlockBox;
  *
  * @author Jamalam360
  */
-public record MatchResult(MultiblockPattern pattern, int height, int width, int depth, BlockBox box) {
+public record MatchResult(MultiblockPattern pattern, BlockPos bottomLeftPos, BlockPos bottomLeftPosCorrected, BlockBox box, int height, int width,
+                          int depth) {
 }
