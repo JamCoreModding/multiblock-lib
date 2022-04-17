@@ -33,6 +33,7 @@ import io.github.jamalam360.multiblocklib.api.components.MultiblockProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -131,7 +132,7 @@ public class MultiblockProviderImpl implements MultiblockProvider, ServerTicking
             BlockPos bottomLeft = new BlockPos(bottomLeftArr[0], bottomLeftArr[1], bottomLeftArr[2]);
             Identifier identifier = new Identifier(multiblockTag.getString("PatternIdentifier"));
 
-            if (MultiblockLib.INSTANCE.tryAssembleMultiblock(identifier, provider, bottomLeft)) {
+            if (MultiblockLib.INSTANCE.tryAssembleMultiblock(identifier, provider, Direction.EAST, bottomLeft)) {
                 this.getMultiblock(bottomLeft).ifPresent(multiblock -> multiblock.readTag(multiblockTag.getCompound("MultiblockTag")));
             }
         }

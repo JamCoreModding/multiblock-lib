@@ -89,7 +89,7 @@ public class TestInit implements ModInitializer {
                     return ActionResult.SUCCESS;
                 }
             } else {
-                if (MultiblockLib.INSTANCE.tryAssembleMultiblock(context.getWorld(), context.getBlockPos())) {
+                if (MultiblockLib.INSTANCE.tryAssembleMultiblock(context.getWorld(), context.getPlayerFacing(), context.getBlockPos())) {
                     if (context.getWorld().isClient) {
                         context.getPlayer().playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 2.0F, 1.0F);
                     }

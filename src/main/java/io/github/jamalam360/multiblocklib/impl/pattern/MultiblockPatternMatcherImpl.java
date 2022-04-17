@@ -42,11 +42,16 @@ import java.util.function.Predicate;
  */
 @SuppressWarnings("unchecked")
 public class MultiblockPatternMatcherImpl implements MultiblockPatternMatcher {
-    public Optional<MatchResult> tryMatchPattern(BlockPos bottomLeft, World world, MultiblockPattern pattern, Map<Character, Predicate<CachedBlockPosition>> keys) {
-        return tryMatchPattern(bottomLeft, world, pattern, keys, 0);
+    @Override
+    public Optional<MatchResult> tryMatchPattern(BlockPos bottomLeft, Direction direction, World world, MultiblockPattern pattern, Map<Character, Predicate<CachedBlockPosition>> keys) {
+        if (direction == Direction.DOWN || direction == Direction.UP) {
+            return Optional.empty();
+        }
+
+        return tryMatchPattern(bottomLeft, direction, world, pattern, keys, 0);
     }
 
-    private Optional<MatchResult> tryMatchPattern(BlockPos bottomLeft, World world, MultiblockPattern pattern, Map<Character, Predicate<CachedBlockPosition>> keys, int rotateCount) {
+    private Optional<MatchResult> tryMatchPattern(BlockPos bottomLeft, Direction direction, World world, MultiblockPattern pattern, Map<Character, Predicate<CachedBlockPosition>> keys, int rotateCount) {
         boolean checkedAllLayers = false;
         int layerNumber = 0;
         int loopCount = 0;
@@ -82,10 +87,10 @@ public class MultiblockPatternMatcherImpl implements MultiblockPatternMatcher {
             mutable.setZ(bottomLeft.getZ());
 
             if (layerIsRepeatable) {
-                int matches = matchesRepeatableLayer(blocks, world, mutable);
+                int matches = matchesRepeatableLayer(blocks, world, mutable, direction);
                 if (matches == -1 || matches < layer.min() || matches > layer.max()) {
                     if (rotateCount < 4) {
-                        return tryMatchPattern(bottomLeft, world, pattern, keys, rotateCount + 1);
+                        return tryMatchPattern(bottomLeft, direction, world, pattern, keys, rotateCount + 1);
                     }
 
                     return Optional.empty();
@@ -94,9 +99,9 @@ public class MultiblockPatternMatcherImpl implements MultiblockPatternMatcher {
                     layerNumber++;
                 }
             } else {
-                if (!matchesLayer(blocks, world, mutable)) {
+                if (!matchesLayer(blocks, world, mutable, direction)) {
                     if (rotateCount < 4) {
-                        return tryMatchPattern(bottomLeft, world, pattern, keys, rotateCount + 1);
+                        return tryMatchPattern(bottomLeft, direction, world, pattern, keys, rotateCount + 1);
                     }
 
                     return Optional.empty();
@@ -109,17 +114,35 @@ public class MultiblockPatternMatcherImpl implements MultiblockPatternMatcher {
             finalPos = mutable.toImmutable();
         }
 
+        BlockBox box = null;
+
+        switch (direction) {
+            case NORTH -> box = new BlockBox(
+                    bottomLeft.getX() - pattern.width(), bottomLeft.getY() + loopCount, bottomLeft.getZ() - pattern.depth(),
+                    bottomLeft.getX(), bottomLeft.getY(), bottomLeft.getZ()
+            );
+            case SOUTH -> box = new BlockBox(
+                    bottomLeft.getX(), bottomLeft.getY(), bottomLeft.getZ(),
+                    bottomLeft.getX() - pattern.width(), bottomLeft.getY() + loopCount, bottomLeft.getZ() + pattern.depth()
+            );
+            case EAST -> box = BlockBox.create(bottomLeft, finalPos);
+            case WEST -> box = new BlockBox(
+                    bottomLeft.getX(), bottomLeft.getY(), bottomLeft.getZ(),
+                    bottomLeft.getX() - pattern.width(), bottomLeft.getY() + loopCount, bottomLeft.getZ() - pattern.depth()
+            );
+        }
+
         return Optional.of(
-                new MatchResult(pattern, loopCount, pattern.width(), pattern.depth(), BlockBox.create(bottomLeft, finalPos))
+                new MatchResult(pattern, loopCount, pattern.width(), pattern.depth(), box)
         );
     }
 
-    private int matchesRepeatableLayer(Predicate<CachedBlockPosition>[][] blocks, World world, BlockPos.Mutable mutable) {
+    private int matchesRepeatableLayer(Predicate<CachedBlockPosition>[][] blocks, World world, BlockPos.Mutable mutable, Direction direction) {
         int matches = 0;
         BlockPos base = mutable.toImmutable();
 
         while (true) {
-            if (matchesLayer(blocks, world, mutable)) {
+            if (matchesLayer(blocks, world, mutable, direction)) {
                 matches++;
             } else {
                 if (matches == 0) {
@@ -128,21 +151,35 @@ public class MultiblockPatternMatcherImpl implements MultiblockPatternMatcher {
                     return matches;
                 }
             }
+
             mutable.move(Direction.UP);
             mutable.setX(base.getX());
             mutable.setZ(base.getZ());
         }
     }
 
-    private boolean matchesLayer(Predicate<CachedBlockPosition>[][] blocks, World world, BlockPos.Mutable pos) {
+    private boolean matchesLayer(Predicate<CachedBlockPosition>[][] blocks, World world, BlockPos.Mutable pos, Direction direction) {
         BlockPos bottomLeft = pos.toImmutable();
         for (int rowIndex = 0; rowIndex < blocks.length; rowIndex++) {
             Predicate<CachedBlockPosition>[] row = blocks[rowIndex];
-            pos.setZ(bottomLeft.getZ() + rowIndex);
+
+            switch (direction) {
+                case NORTH -> pos.setX(bottomLeft.getX() + rowIndex);
+                case SOUTH -> pos.setX(bottomLeft.getX() - rowIndex);
+                case EAST -> pos.setZ(bottomLeft.getZ() + rowIndex);
+                case WEST -> pos.setZ(bottomLeft.getZ() - rowIndex);
+            }
 
             for (int columnIndex = 0; columnIndex < row.length; columnIndex++) {
                 Predicate<CachedBlockPosition> block = row[columnIndex];
-                pos.setX(bottomLeft.getX() + columnIndex);
+
+                switch (direction) {
+                    case NORTH -> pos.setZ(bottomLeft.getZ() - columnIndex);
+                    case SOUTH -> pos.setZ(bottomLeft.getZ() + columnIndex);
+                    case EAST -> pos.setX(bottomLeft.getX() + columnIndex);
+                    case WEST -> pos.setX(bottomLeft.getX() - columnIndex);
+                }
+
                 if (!block.test(new CachedBlockPosition(world, pos, true))) {
                     return false;
                 }

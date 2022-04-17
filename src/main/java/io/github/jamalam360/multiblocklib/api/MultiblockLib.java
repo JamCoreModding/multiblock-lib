@@ -24,11 +24,12 @@
 
 package io.github.jamalam360.multiblocklib.api;
 
-import io.github.jamalam360.multiblocklib.impl.MultiblockLibImpl;
 import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPattern;
+import io.github.jamalam360.multiblocklib.impl.MultiblockLibImpl;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.Map;
@@ -39,8 +40,8 @@ import java.util.function.Predicate;
  * The main MultiblockLib API. Responsible for registering {@link Multiblock}s
  * and assembling/disassembling them.
  *
- * @see MultiblockLibImpl
  * @author Jamalam360
+ * @see MultiblockLibImpl
  */
 public interface MultiblockLib {
     //TODO: Assemble from any block on the multiblock
@@ -58,29 +59,32 @@ public interface MultiblockLib {
      * Checks all registered multiblock patterns for a match. It is more efficient to use one of
      * the other methods below if you have a pattern ID.
      *
-     * @param world The {@link World} to use.
-     * @param pos   The {@link BlockPos} of the bottom left corner of the multiblock.
+     * @param world     The {@link World} to use.
+     * @param direction The {@link Direction} to check.
+     * @param pos       The {@link BlockPos} of the bottom left corner of the multiblock.
      * @return {@code true} if the multiblock was successfully assembled, {@code false} otherwise.
      */
-    boolean tryAssembleMultiblock(World world, BlockPos pos);
+    boolean tryAssembleMultiblock(World world, Direction direction, BlockPos pos);
 
 
     /**
      * @param patternId The {@link Identifier} of the {@link MultiblockPattern} to test for.
      * @param world     The {@link World} to use.
+     * @param direction The {@link Direction} to check.
      * @param pos       The {@link BlockPos} of the bottom left corner of the multiblock.
      * @return {@code true} if the multiblock was successfully assembled, {@code false} otherwise.
      */
-    boolean tryAssembleMultiblock(Identifier patternId, World world, BlockPos pos);
+    boolean tryAssembleMultiblock(Identifier patternId, World world, Direction direction, BlockPos pos);
 
 
     /**
      * @param pattern The {@link MultiblockPattern} to test for.
      * @param world   The {@link World} to use.
+     * @param direction The {@link Direction} to check.
      * @param pos     The {@link BlockPos} of the bottom left corner of the multiblock.
      * @return {@code true} if the multiblock was successfully assembled, {@code false} otherwise.
      */
-    boolean tryAssembleMultiblock(MultiblockPattern pattern, World world, BlockPos pos);
+    boolean tryAssembleMultiblock(MultiblockPattern pattern, World world, Direction direction, BlockPos pos);
 
     /**
      * @param multiblock The {@link Multiblock} to try to disassemble.

@@ -35,6 +35,7 @@ import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPatterns;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.Map;
@@ -57,9 +58,9 @@ public class MultiblockLibImpl implements MultiblockLib {
     }
 
     @Override
-    public boolean tryAssembleMultiblock(World world, BlockPos pos) {
+    public boolean tryAssembleMultiblock(World world, Direction direction, BlockPos pos) {
         for (MultiblockPattern pattern : MultiblockPatterns.INSTANCE.getPatterns()) {
-            if (tryAssembleMultiblock(pattern, world, pos)) {
+            if (tryAssembleMultiblock(pattern, world, direction, pos)) {
                 return true;
             }
         }
@@ -68,13 +69,13 @@ public class MultiblockLibImpl implements MultiblockLib {
     }
 
     @Override
-    public boolean tryAssembleMultiblock(Identifier patternId, World world, BlockPos pos) {
+    public boolean tryAssembleMultiblock(Identifier patternId, World world, Direction direction, BlockPos pos) {
         Optional<MultiblockPattern> optional = MultiblockPatterns.INSTANCE.getPattern(patternId);
-        return optional.filter(multiblockPattern -> tryAssembleMultiblock(multiblockPattern, world, pos)).isPresent();
+        return optional.filter(multiblockPattern -> tryAssembleMultiblock(multiblockPattern, world, direction, pos)).isPresent();
     }
 
     @Override
-    public boolean tryAssembleMultiblock(MultiblockPattern pattern, World world, BlockPos pos) {
+    public boolean tryAssembleMultiblock(MultiblockPattern pattern, World world, Direction direction, BlockPos pos) {
         if (MultiblockComponentsInit.PROVIDER.get(world).getMultiblock(pos).isPresent()) {
             return true;
         }
@@ -84,7 +85,7 @@ public class MultiblockLibImpl implements MultiblockLib {
             throw new IllegalStateException("No multiblock keys registered for pattern: " + pattern.identifier());
         }
 
-        Optional<MatchResult> result = MultiblockPatternMatcher.INSTANCE.tryMatchPattern(pos, world, pattern, MULTIBLOCK_PATTERNS_TO_KEYS.get(pattern.identifier()));
+        Optional<MatchResult> result = MultiblockPatternMatcher.INSTANCE.tryMatchPattern(pos, direction, world, pattern, MULTIBLOCK_PATTERNS_TO_KEYS.get(pattern.identifier()));
         if (result.isPresent()) {
             if (!MULTIBLOCK_PATTERNS_TO_PROVIDERS.containsKey(pattern.identifier())) {
                 MultiblockLogger.INSTANCE.error("No multiblock provider registered for multiblock pattern: " + pattern.identifier());
@@ -102,7 +103,7 @@ public class MultiblockLibImpl implements MultiblockLib {
 
     @Override
     public boolean tryDisassembleMultiblock(Multiblock multiblock, boolean forced) {
-        boolean ableToDisassemble = multiblock.onDisassemble( forced);
+        boolean ableToDisassemble = multiblock.onDisassemble(forced);
         if (ableToDisassemble) {
             MultiblockComponentsInit.PROVIDER.get(multiblock.getWorld()).removeMultiblock(multiblock);
             return true;
