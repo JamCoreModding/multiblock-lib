@@ -26,10 +26,9 @@ package io.github.jamalam360.multiblocklib.impl.pattern.resource;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import io.github.jamalam360.multiblocklib.impl.MultiblockLogger;
-import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPatterns;
 import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPattern;
+import io.github.jamalam360.multiblocklib.api.pattern.MultiblockPatterns;
+import io.github.jamalam360.multiblocklib.impl.MultiblockLogger;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
@@ -59,7 +58,7 @@ public class MultiblockResourceReloadListener extends JsonDataLoader implements 
                 MultiblockPatterns.INSTANCE.add(MultiblockPattern.deserialize(id, element));
                 count.getAndIncrement();
             } else {
-                MultiblockLogger.LOGGER.warn("Failed to load pattern {}", id);
+                MultiblockLogger.INSTANCE.warn("Failed to load pattern {}", id);
                 MultiblockLogger.INSTANCE.warn("MultiblockPattern {} is not a JSON object", id);
             }
         });
