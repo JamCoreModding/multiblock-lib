@@ -44,8 +44,6 @@ import java.util.function.Predicate;
  * @see MultiblockLibImpl
  */
 public interface MultiblockLib {
-    //TODO: Assemble from any block on the multiblock
-
     MultiblockLib INSTANCE = new MultiblockLibImpl();
 
     /**
