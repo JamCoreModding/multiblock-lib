@@ -114,8 +114,10 @@ public class MultiblockPatternMatcherImpl implements MultiblockPatternMatcher {
             finalPos = mutable.toImmutable();
         }
 
+        BlockPos realBottomLeftFacingEast = correctToBottomLeft(pattern, bottomLeft, direction);
+
         return Optional.of(
-                new MatchResult(pattern, bottomLeft, correctToBottomLeft(pattern, bottomLeft, direction) , BlockBox.create(bottomLeft, finalPos), loopCount, pattern.width(), pattern.depth())
+                new MatchResult(pattern, bottomLeft, realBottomLeftFacingEast, BlockBox.create(realBottomLeftFacingEast, realBottomLeftFacingEast.mutableCopy().move(pattern.width(), loopCount, pattern.depth())), loopCount, pattern.width(), pattern.depth())
         );
     }
 

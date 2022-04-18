@@ -58,6 +58,7 @@ public class TestInit implements ModInitializer {
         MultiblockLib.INSTANCE.registerMultiblock(new Identifier("multiblocklibtest", "rotatable"), TestMultiblock::new, DEFAULT_KEYS);
         MultiblockLib.INSTANCE.registerMultiblock(new Identifier("multiblocklibtest", "other"), TestMultiblock::new, DEFAULT_KEYS);
         MultiblockLib.INSTANCE.registerMultiblock(new Identifier("multiblocklibtest", "test"), TestMultiblock::new, DEFAULT_KEYS);
+        MultiblockLib.INSTANCE.registerMultiblock(new Identifier("multiblocklibtest", "chonk"), TestMultiblock::new, DEFAULT_KEYS);
 
         MultiblockLib.INSTANCE.registerMultiblock(
                 new Identifier("multiblocklibtest", "big_chest"),
