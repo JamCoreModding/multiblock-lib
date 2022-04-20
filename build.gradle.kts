@@ -61,6 +61,11 @@ loom {
     }
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+    
 tasks {
     processResources {
         inputs.property("version", project.version)
